@@ -69,6 +69,8 @@ Exit criteria:
 
 ## S3 — Fusion + Temporal + Epistemics
 
+**Status: in progress.**
+
 Build:
 - signal correlation and clustering
 - source-diversity weighting
