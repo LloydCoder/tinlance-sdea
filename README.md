@@ -275,81 +275,78 @@ The Python contracts use Pydantic v2, frozen models and forbidden extra fields t
 
 ## Repository structure
 
-The repository intentionally separates **implemented foundations** from **future architectural boundaries**:
+The repository now contains the complete S0–S8 architecture plus a final forensic hardening pass. The packages are intentionally separated by semantic ownership:
 
 ```text
 tinlance-sdea/
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── docs/
-│   ├── adr/
-│   │   ├── README.md
-│   │   └── 0001-sdea-boundary.md
-│   ├── architecture.md
-│   ├── domain-model.md
-│   └── roadmap.md
-├── src/
-│   └── tinlance_sdea/
-│       ├── domain/          # canonical contracts + invariants
-│       ├── evidence/        # evidence lifecycle boundary
-│       ├── signals/         # signal semantics + normalization
-│       ├── fusion/          # correlation and signal clustering
-│       ├── temporal/        # time-aware reasoning
-│       ├── inference/       # demand/capability inference
-│       ├── opportunity/     # opportunity intelligence
-│       ├── acquisition/     # acquisition-mode intelligence
-│       ├── policy/          # SDEA decision/policy constraints
-│       └── integrations/    # external system contracts
-├── tests/
-│   └── test_domain_models.py
+├── docs/                 # architecture, domain, roadmap and ADRs
+├── src/tinlance_sdea/
+│   ├── domain/           # canonical immutable contracts + invariants
+│   ├── entity/           # canonical identity and ambiguity-safe resolution
+│   ├── evidence/         # provenance, fingerprints and reliability
+│   ├── signals/          # taxonomy, normalization and deduplication
+│   ├── adapters/         # source-adapter extension contracts
+│   ├── fusion/           # correlation, clustering, contradiction and graphing
+│   ├── temporal/         # recency, persistence, acceleration, decay and windows
+│   ├── epistemics/       # confidence, uncertainty, contradiction and calibration
+│   ├── capability/       # ontology, taxonomy and capability mappings
+│   ├── inference/        # demand/capability inference abstractions
+│   ├── opportunity/      # qualification, lifecycle, buying windows and handoff
+│   ├── acquisition/      # advisory acquisition-mode recommendations
+│   ├── outcomes/         # outcome events, attribution and feedback
+│   ├── evaluation/       # metrics, benchmarks, regression and adjudication
+│   ├── contracts/        # versioned serialization/schema/event contracts
+│   ├── governance/       # classification, retention and redaction primitives
+│   ├── observability/    # SDEA semantic conventions and trace context
+│   ├── policy/           # non-authoritative recommendation-quality gates
+│   └── integrations/     # TADS, ReconOS, FadeReach, FDSE and adapter contracts
+├── tests/                # phase and invariant regression coverage
 ├── pyproject.toml
-├── .pre-commit-config.yaml
-└── README.md
+└── .github/workflows/    # Python 3.12–3.14 CI
 ```
 
-The repository now has substantive S1 entity/evidence foundations, S2 signal intelligence, and an S3 deterministic fusion/temporal/epistemic foundation. `signals/` owns canonical signal semantics; `adapters/` owns source-adapter extension contracts; `fusion/`, `temporal/` and `epistemics/` own deterministic reasoning primitives. Later packages remain architectural seams until their milestone is implemented.
+All planned implementation phases S0–S8 are complete. The final hardening pass tightened semantic invariants, timezone discipline, entity ambiguity handling, ontology integrity, contract version validation, governance semantics, observability schema identity, lifecycle transitions and regression evaluation.
 
 ## Engineering invariants
 
-The current foundation enforces or documents these invariants:
+The completed implementation enforces these invariants:
 
-- An opportunity must remain traceable to evidence.
-- A demand hypothesis requires an explicit rationale.
-- Confidence values remain bounded from 0 to 1.
-- Canonical models reject unexpected fields.
-- Canonical models are immutable after construction.
-- Recommendations require human approval by default.
-- SDEA does not own execution authority.
-
-Future invariants will cover provenance integrity, temporal consistency, contradiction handling, deduplication, confidence calibration and integration contracts.
+- Evidence and signals use timezone-aware observation/collection timestamps.
+- Signals, hypotheses and opportunities retain evidence lineage.
+- Demand hypotheses require supporting signals and explicit rationale.
+- Opportunities require evidence and explicit rationale.
+- Confidence, urgency and reliability remain bounded from 0 to 1.
+- Canonical models reject unexpected fields and are immutable after construction.
+- Entity resolution rejects ambiguous exact-normalized matches rather than silently selecting one.
+- Capability ontology parent relationships are validated and acyclic.
+- Contract versions are validated and compatibility is explicitly major-version based.
+- Observability events use stable names and versioned schema identity.
+- Opportunity lifecycle transitions are explicit and auditable.
+- Acquisition recommendations cannot disable human approval.
+- SDEA policy decisions are advisory quality gates, never authorization.
+- Agent Platform remains the authoritative owner of permissions and action approvals.
+- Regression benchmarks and calibration metrics are deterministic and inspectable.
 
 ## Roadmap
 
-SDEA is intentionally built in controlled milestones.
+The planned implementation sequence is complete:
 
-### M0 — Foundation
-**Current foundation:** repository boundary, canonical domain contracts, invariants, documentation, ADR discipline and CI quality gates.
+| Phase | Scope | Status |
+|---|---|---|
+| S0 | Foundation, domain contracts, ADRs and CI | Complete |
+| S1 | Entity + evidence foundation | Complete |
+| S2 | Signal intelligence + adapters | Complete |
+| S3 | Fusion + temporal + epistemics | Complete |
+| S4 | Capability intelligence + inference | Complete |
+| S5 | Opportunity + acquisition intelligence | Complete |
+| S6 | Outcomes + evaluation | Complete |
+| S7 | Versioned contracts + ecosystem integrations | Complete |
+| S8 | Governance + observability + policy hardening | Complete |
+| Final forensic hardening | Repository-wide semantic, contract, security and documentation audit | Complete |
 
-### M1 — Signal foundation
-Normalize heterogeneous sources into stable signal contracts; add source adapters, provenance references, deduplication and source reliability metadata.
+Each phase was gated by the repository quality workflow before the next phase was advanced. The final audit then reviewed the complete code/document surface and repaired semantic gaps that ordinary linting, typing and unit tests could not identify.
 
-### S3 — Fusion + Temporal + Epistemics
-Build evidence relationships, signal clustering, correlation, contradiction handling and temporal reasoning.
-
-### S4 — Capability Intelligence
-Introduce demand hypotheses, capability ontology, capability inference, explainability and confidence calibration.
-
-### S5 — Opportunity Intelligence
-Introduce opportunity qualification, buying windows, opportunity decay and acquisition-mode recommendations.
-
-### S7 — Contracts + Ecosystem Integration
-Connect TADS, ReconOS, FadeReach, FDSE/FDE and domain-specific signal adapters through explicit versioned contracts.
-
-### S6/S8 — Closed-Loop Intelligence + Enterprise Hardening
-Add benchmark cases, precision/recall analysis, calibration, auditability, observability, policy controls, cost controls and multi-tenant boundaries where required.
-
-**Rule:** each milestone must leave the repository testable, documented and internally coherent. New integrations must not be allowed to redefine SDEA's core semantics.
+**Permanent rule:** SDEA remains an intelligence substrate. New integrations must not redefine its core semantics or introduce CRM, outreach, execution or authorization responsibilities.
 
 ## Development
 
@@ -399,7 +396,9 @@ SDEA's intelligence layer must never be treated as an authorization boundary.
 
 ## Project status
 
-**Active development — S8 Enterprise Hardening. S0–S7 are complete; S8 is the current serial phase.**
+**Planned implementation complete — S0–S8 plus final forensic hardening are complete.**
+
+The repository remains a maintained enterprise-grade intelligence foundation: future work is additive evolution, new source/domain adapters, calibration data, integrations and operational deployment—not reopening the core architectural boundary.
 
 The project is deliberately optimizing for **trustworthy intelligence, durable contracts and architectural clarity before feature volume**.
 

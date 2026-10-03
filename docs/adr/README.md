@@ -38,3 +38,4 @@ Each ADR should contain:
 ## Current ADRs
 
 - [0001 — SDEA permanent boundary](0001-sdea-boundary.md)
+- [0002 — Final forensic hardening](0002-final-hardening.md)

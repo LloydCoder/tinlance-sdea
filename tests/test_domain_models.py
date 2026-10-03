@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from uuid import uuid4
 
 import pytest
 from pydantic import ValidationError
@@ -10,37 +11,38 @@ from tinlance_sdea.domain.models import (
     Evidence,
     EvidenceState,
     Opportunity,
+    Signal,
 )
 from tinlance_sdea.entity import Entity, EntityAlias, EntityType, resolve_entity
 from tinlance_sdea.evidence import Provenance, SourceReliability, fingerprint_evidence
 
 
-def test_demand_hypothesis_requires_rationale() -> None:
-    hypothesis = DemandHypothesis(
+def hypothesis() -> DemandHypothesis:
+    return DemandHypothesis(
         entity_id="company:example",
         statement="A capability need may be emerging.",
+        supporting_signal_ids=(uuid4(),),
         confidence=0.7,
         rationale="Corroborating signals indicate expansion.",
     )
-    assert hypothesis.confidence == 0.7
+
+
+def test_demand_hypothesis_requires_rationale() -> None:
+    item = hypothesis()
+    assert item.confidence == 0.7
 
 
 def test_opportunity_can_recommend_multiple_acquisition_modes() -> None:
-    hypothesis = DemandHypothesis(
+    item = Opportunity(
         entity_id="company:example",
-        statement="Platform capability demand is emerging.",
-        confidence=0.8,
-        rationale="Multiple signals indicate infrastructure expansion.",
-    )
-    opportunity = Opportunity(
-        entity_id="company:example",
-        capability_need_id=hypothesis.id,
+        capability_need_id=hypothesis().id,
         confidence=0.8,
         acquisition_modes=(AcquisitionMode.FDE, AcquisitionMode.FRACTIONAL),
+        evidence_ids=(uuid4(),),
         rationale="Embedded or fractional delivery may satisfy the need.",
     )
-    assert AcquisitionMode.FDE in opportunity.acquisition_modes
-    assert AcquisitionMode.FRACTIONAL in opportunity.acquisition_modes
+    assert AcquisitionMode.FDE in item.acquisition_modes
+    assert AcquisitionMode.FRACTIONAL in item.acquisition_modes
 
 
 def test_evidence_separates_epistemic_and_lifecycle_state() -> None:
@@ -79,6 +81,25 @@ def test_entity_resolution_is_deterministic_for_aliases() -> None:
     assert result.confidence == 1.0
 
 
+def test_entity_resolution_rejects_ambiguity() -> None:
+    from tinlance_sdea.entity import AmbiguousEntityResolution
+
+    entities = (
+        Entity(
+            id="org:a",
+            entity_type=EntityType.ORGANIZATION,
+            canonical_name="Example Ltd",
+        ),
+        Entity(
+            id="org:b",
+            entity_type=EntityType.ORGANIZATION,
+            canonical_name="Example Ltd",
+        ),
+    )
+    with pytest.raises(AmbiguousEntityResolution):
+        resolve_entity("example ltd", entities)
+
+
 def test_entity_resolution_returns_none_for_unknown_entity() -> None:
     entity = Entity(
         id="org:tinlance",
@@ -109,25 +130,21 @@ def test_provenance_and_reliability_contracts_bound_confidence() -> None:
         source_name="example",
         reliability=0.8,
         rationale="Primary source.",
-        assessed_at="2026-10-02T00:00:00Z",
+        assessed_at=datetime(2026, 10, 2, tzinfo=UTC),
     )
     assert provenance.collector == "adapter:test"
     assert reliability.reliability == 0.8
 
 
 def test_domain_contracts_validate_temporal_and_confidence_boundaries() -> None:
-    from tinlance_sdea.domain.models import (
-        BuyingWindow,
-        CapabilityNeed,
-        Signal,
-        SignalCluster,
-    )
+    from tinlance_sdea.domain.models import BuyingWindow, CapabilityNeed, Signal, SignalCluster
 
     signal_id = Signal(
         entity_id="org:example",
         signal_type="funding",
         occurred_at=datetime(2026, 10, 1, tzinfo=UTC),
         observed_at=datetime(2026, 10, 2, tzinfo=UTC),
+        evidence_ids=(uuid4(),),
     ).id
     cluster = SignalCluster(
         entity_id="org:example",
@@ -136,16 +153,11 @@ def test_domain_contracts_validate_temporal_and_confidence_boundaries() -> None:
         last_observed_at=datetime(2026, 10, 2, tzinfo=UTC),
         confidence=0.9,
     )
-    hypothesis = DemandHypothesis(
-        entity_id="org:example",
-        statement="A platform need may be emerging.",
-        confidence=0.8,
-        rationale="Funding and technology signals align.",
-    )
+    item = hypothesis()
     capability = CapabilityNeed(
         entity_id="org:example",
         capability="platform engineering",
-        demand_hypothesis_id=hypothesis.id,
+        demand_hypothesis_id=item.id,
         confidence=0.8,
         urgency=0.7,
         why_now="Recent infrastructure expansion.",
@@ -185,8 +197,17 @@ def test_invalid_intervals_and_confidence_are_rejected() -> None:
         DemandHypothesis(
             entity_id="org:example",
             statement="Invalid confidence.",
+            supporting_signal_ids=(uuid4(),),
             confidence=1.1,
             rationale="Should fail.",
+        )
+    with pytest.raises(ValidationError):
+        Signal(
+            entity_id="org:example",
+            signal_type="funding",
+            occurred_at=datetime(2026, 10, 1),
+            observed_at=datetime(2026, 10, 2),
+            evidence_ids=(uuid4(),),
         )
 
 
@@ -196,13 +217,9 @@ def test_acquisition_recommendation_is_human_approval_by_default() -> None:
     recommendation = AcquisitionRecommendation(
         opportunity_id=Opportunity(
             entity_id="org:example",
-            capability_need_id=DemandHypothesis(
-                entity_id="org:example",
-                statement="Need",
-                confidence=0.5,
-                rationale="Evidence exists.",
-            ).id,
+            capability_need_id=hypothesis().id,
             confidence=0.5,
+            evidence_ids=(uuid4(),),
             rationale="Evidence-backed opportunity.",
         ).id,
         mode=AcquisitionMode.PRODUCT,
@@ -210,6 +227,14 @@ def test_acquisition_recommendation_is_human_approval_by_default() -> None:
         rationale="A product may satisfy the capability.",
     )
     assert recommendation.requires_human_approval is True
+    with pytest.raises(ValidationError):
+        AcquisitionRecommendation(
+            opportunity_id=recommendation.opportunity_id,
+            mode=AcquisitionMode.PRODUCT,
+            confidence=0.6,
+            rationale="Unsafe autonomous recommendation.",
+            requires_human_approval=False,
+        )
 
 
 def test_entity_identifier_and_normalization_contracts() -> None:

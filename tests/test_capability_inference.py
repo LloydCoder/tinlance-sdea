@@ -42,6 +42,22 @@ def test_capability_ontology_and_taxonomy() -> None:
     assert normalize_alias("  Data   Engineering ") == "data engineering"
 
 
+def test_capability_parent_integrity() -> None:
+    parent = Capability(id="platform", name="Platform Engineering", version="1.0.0")
+    child = Capability(
+        id="cloud",
+        name="Cloud Engineering",
+        version="1.0.0",
+        parent_id="platform",
+    )
+    ontology = CapabilityOntology((parent, child))
+    assert ontology.get("cloud").parent_id == "platform"
+    with pytest.raises(ValueError):
+        CapabilityOntology((child,))
+    with pytest.raises(ValueError):
+        Capability(id="bad", name="Bad", version="invalid")
+
+
 def test_capability_mapping_relationships() -> None:
     mapping = mapping_for("Platform Engineer", "platform", 0.8, "repeated hiring signal")
     assert infer_capability(mapping) == mapping
@@ -93,13 +109,7 @@ def test_rules_uncertainty_and_calibration() -> None:
     assert uncertainty.temporal_stability == 0.5
     assert calibration_error((0.8, 0.2), (True, False)) == pytest.approx(0.04)
     with pytest.raises(ValueError):
-        ontology_missing()
-    with pytest.raises(ValueError):
         validate_hypothesis(hypothesis_empty())
-
-
-def ontology_missing() -> None:
-    raise ValueError("synthetic validation branch")
 
 
 def hypothesis_empty() -> object:
@@ -109,6 +119,7 @@ def hypothesis_empty() -> object:
         entity_id="org:example",
         statement="x",
         confidence=0.5,
+        supporting_signal_ids=(uuid4(),),
         rationale="",
     )
 

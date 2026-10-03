@@ -2,9 +2,10 @@
 
 from .models import Entity, EntityAlias, EntityIdentifier, EntityResolution, EntityType
 from .normalization import normalize_entity_name
-from .resolution import resolve_entity
+from .resolution import AmbiguousEntityResolution, resolve_entity
 
 __all__ = [
+    "AmbiguousEntityResolution",
     "Entity",
     "EntityAlias",
     "EntityIdentifier",

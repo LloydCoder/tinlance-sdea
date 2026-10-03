@@ -240,9 +240,9 @@ SDEA should therefore prefer explicit, versioned schemas over opaque model-gener
 
 ## 7. Trust, safety and evaluation
 
-The system should treat inference quality as an engineering property.
+Inference quality is an engineering property and is represented explicitly in the completed repository.
 
-Future evaluation must measure at least:
+The evaluation surface measures at least:
 
 - evidence traceability
 - signal normalization accuracy
@@ -257,32 +257,25 @@ Future evaluation must measure at least:
 
 Model-assisted inference must remain measurable, reviewable and replaceable. NIST's AI RMF emphasizes validity/reliability, accountability/transparency, explainability and ongoing testing/monitoring as trustworthiness concerns; those principles are useful design constraints for SDEA's inference layer. urlNIST AI RMFhttps://www.nist.gov/itl/ai-risk-management-framework
 
-## 8. Current implementation boundary
+## 8. Completed implementation boundary
 
-S0 and S1 implement the canonical domain and entity/evidence foundations. S2 adds deterministic signal intelligence:
+The repository implements the complete planned S0–S8 surface:
 
-- canonical signal taxonomy with explicit version
-- normalized signal records
-- chronology and evidence validation
-- deterministic signal fingerprints
-- deterministic deduplication
-- signal-type registry
-- source-adapter interface
-- adapter capability, registry and health contracts
-- CI quality gates across Python 3.12–3.14
+- **S0:** canonical immutable domain contracts, invariants, ADRs and CI.
+- **S1:** entity identity, normalization, ambiguity-safe resolution, evidence provenance, fingerprints and source reliability.
+- **S2:** versioned signal taxonomy, normalization, validation, fingerprints, deduplication, adapter contracts, registry, capabilities and health.
+- **S3:** correlation, connected-component clustering, contradiction detection, source diversity, weighting, relationship graphs, temporal intervals, recency, persistence, acceleration, decay, windows, uncertainty and calibration.
+- **S4:** capability ontology, aliases, relationships, mappings, demand hypotheses, inference abstraction, model gateway, explanations and calibration.
+- **S5:** opportunity qualification, lifecycle transitions, decay, buying windows, graphs, explanations, handoff and acquisition recommendations.
+- **S6:** outcomes, attribution, feedback, learning primitives, evaluation metrics, benchmark cases, regression evaluation and human adjudication.
+- **S7:** versioned serialization/schema/event contracts plus TADS, ReconOS, FadeReach, FDSE and domain-adapter integration contracts.
+- **S8:** classification, safe sharing semantics, retention/redaction primitives, observability semantic conventions/events/trace context and advisory recommendation-quality policy controls.
 
-S3 implements the fusion, temporal and epistemic foundations:
+The final forensic hardening pass strengthened cross-cutting invariants, timezone discipline, contract validation, ontology integrity, ambiguity handling and documentation consistency.
 
-- deterministic temporal correlation and connected-component clustering
-- source-diversity and reliability weighting
-- explicit directional contradiction detection
-- serializable signal relationship graph and fusion explanations
-- temporal intervals, recency, persistence, acceleration, decay and monitoring windows
-- independent epistemic assessment, uncertainty, contradiction and calibration primitives
+The signal-adapter boundary remains intentionally narrow: adapters translate source payloads into canonical signals; they do not own crawling policy, commercial workflows, inference authority or execution.
 
-These components are deterministic foundations. They do not assert demand, capability or opportunity truth; those remain S4+ responsibilities.
-
-The signal-adapter boundary is intentionally narrow: adapters translate source payloads into canonical signals; they do not own crawling policy, commercial workflows, inference authority or execution.
+The repository is a semantic/intelligence library, not a deployed runtime. Persistence, authentication, authorization, secrets, execution budgets, tenant enforcement and action approvals remain external responsibilities; Agent Platform is authoritative for governed execution.
 
 ## 9. Architectural rule
 

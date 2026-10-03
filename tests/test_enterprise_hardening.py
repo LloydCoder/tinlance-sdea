@@ -12,6 +12,7 @@ from tinlance_sdea.governance import (
 from tinlance_sdea.observability import (
     ENTITY_ID,
     OPPORTUNITY_CREATED,
+    SCHEMA_URL,
     SCHEMA_VERSION,
     ObservabilityEvent,
     TraceContext,
@@ -20,9 +21,10 @@ from tinlance_sdea.policy import PolicyDecision, decide
 
 
 def test_governance_classification_retention_and_redaction() -> None:
-    assert can_share(DataClass.CONFIDENTIAL, DataClass.INTERNAL)
-    assert not can_share(DataClass.INTERNAL, DataClass.RESTRICTED)
-    assert permitted(DataClass.RESTRICTED, DataClass.PUBLIC)
+    assert can_share(DataClass.PUBLIC, DataClass.PUBLIC)
+    assert can_share(DataClass.INTERNAL, DataClass.RESTRICTED)
+    assert not can_share(DataClass.RESTRICTED, DataClass.PUBLIC)
+    assert permitted(DataClass.CONFIDENTIAL, DataClass.RESTRICTED)
     assert redact_email("contact user@example.com") == "contact [REDACTED_EMAIL]"
     RetentionPolicy(days=30).validate()
     with pytest.raises(ValueError):
@@ -37,13 +39,21 @@ def test_observability_contracts() -> None:
     )
     assert event.name == OPPORTUNITY_CREATED
     assert SCHEMA_VERSION == "1.0.0"
+    assert SCHEMA_URL.endswith("/1.0.0")
     context = TraceContext(trace_id="t1", span_id="s1")
     assert context.child("s2").trace_id == "t1"
+    with pytest.raises(ValueError):
+        ObservabilityEvent(
+            name="dynamic.123",
+            occurred_at=datetime(2026, 10, 1, tzinfo=UTC),
+        )
 
 
-def test_policy_decisions_are_bounded() -> None:
-    assert decide(confidence=0.9) is PolicyDecision.ALLOW
+def test_policy_decisions_are_bounded_and_non_authoritative() -> None:
+    assert decide(confidence=0.9) is PolicyDecision.ELIGIBLE
     assert decide(confidence=0.5) is PolicyDecision.REVIEW
-    assert decide(confidence=0.1) is PolicyDecision.DENY
+    assert decide(confidence=0.1) is PolicyDecision.INSUFFICIENT_EVIDENCE
     with pytest.raises(ValueError):
         decide(confidence=1.2)
+    with pytest.raises(ValueError):
+        decide(confidence=0.9, threshold=0.0)

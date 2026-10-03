@@ -9,6 +9,7 @@ from tinlance_sdea.contracts import (
     json_schema,
     serialize,
 )
+from tinlance_sdea.contracts.versions import schema_url, validate_version
 from tinlance_sdea.integrations._shared import IntegrationContract
 from tinlance_sdea.integrations.domain_adapters.contract import DomainAdapterContract
 from tinlance_sdea.integrations.fadereach.contract import FadeReachContract
@@ -31,6 +32,12 @@ def test_contract_versioning_serialization_and_schema() -> None:
     assert "properties" in schema
     assert compatible("1.2.0", "1.9.0")
     assert not compatible("1.2.0", "2.0.0")
+    assert schema_url("1.2.3").endswith("/1.2.3")
+    validate_version("1.0.0")
+    with pytest.raises(ValueError):
+        validate_version("1.0")
+    with pytest.raises(ValueError):
+        compatible("bad", "1.0.0")
     with pytest.raises(TypeError):
         serialize(object())
 
@@ -52,3 +59,5 @@ def test_integration_contract_boundaries() -> None:
     }
     assert all(item.contract_version == "1.0.0" for item in contracts)
     assert IntegrationContract(consumer="custom", purpose="test").consumer == "custom"
+    with pytest.raises(ValueError):
+        IntegrationContract(consumer="custom", purpose="test", contract_version="bad")

@@ -25,8 +25,17 @@ class SignalRecord(SDEAModel):
 
     @model_validator(mode="after")
     def validate_chronology(self) -> SignalRecord:
+        for name, value in (("occurred_at", self.occurred_at), ("observed_at", self.observed_at)):
+            if value.tzinfo is None or value.utcoffset() is None:
+                raise ValueError(f"{name} must be timezone-aware")
         if self.observed_at < self.occurred_at:
             raise ValueError("observed_at cannot be earlier than occurred_at")
+        if not self.entity_id.strip():
+            raise ValueError("entity_id must be non-empty")
+        if not self.signal_type.strip():
+            raise ValueError("signal_type must be non-empty")
+        if not self.source_event_id.strip():
+            raise ValueError("source_event_id must be non-empty")
         if not self.evidence_ids:
             raise ValueError("a normalized signal must reference at least one evidence item")
         return self
