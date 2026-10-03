@@ -145,7 +145,10 @@ def test_evaluation_and_lifecycle_edges() -> None:
         RegressionCase(case_id="", expected="x", observed="x")
     with pytest.raises(ValidationError):
         Adjudication(case_id="case", decision="", reviewer="human", confidence=0.5)
-    assert transition(LifecycleState.SUPERSEDED, LifecycleState.RETRACTED) is LifecycleState.RETRACTED
+    assert (
+        transition(LifecycleState.SUPERSEDED, LifecycleState.RETRACTED)
+        is LifecycleState.RETRACTED
+    )
     with pytest.raises(ValueError):
         transition(LifecycleState.RETRACTED, LifecycleState.ACTIVE)
 
