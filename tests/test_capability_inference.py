@@ -112,11 +112,6 @@ def hypothesis_empty() -> object:
 
 
 def test_model_gateway_is_non_authoritative() -> None:
-    from tinlance_sdea.inference.model_gateway import InferenceModel
-
-    from collections.abc import Mapping
-    from typing import Any
-
     class DemoModel(InferenceModel):
         def infer(self, features: Mapping[str, Any]) -> Mapping[str, Any]:
             return {"confidence": features.get("confidence", 0.0)}
