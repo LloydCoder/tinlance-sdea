@@ -7,6 +7,7 @@ from tinlance_sdea.evaluation import (
     Adjudication,
     RegressionResult,
     benchmark_cases,
+    evaluate_cases,
     brier,
     precision,
     recall,
@@ -58,7 +59,10 @@ def test_evaluation_metrics_and_calibration() -> None:
 
 def test_benchmark_and_adjudication_contracts() -> None:
     cases = benchmark_cases()
+    assert len(cases) >= 5
     assert cases[0].case_id == "SDEA-001"
+    results = evaluate_cases(cases)
+    assert all(result.passed for result in results)
     result = RegressionResult(case_id="SDEA-001", passed=True, score=1.0)
     assert result.passed
     adjudication = Adjudication(
