@@ -4,5 +4,5 @@ from .._shared import IntegrationContract
 
 
 class FadeReachContract(IntegrationContract):
-    consumer = "fadereach"
-    purpose = "human-approved opportunity handoff"
+    consumer: str = "fadereach"
+    purpose: str = "human-approved opportunity handoff"
