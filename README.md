@@ -399,7 +399,7 @@ SDEA's intelligence layer must never be treated as an authorization boundary.
 
 ## Project status
 
-**Active development — S6 Closed-Loop Intelligence. S0–S5 are complete; S6 is the current serial phase.**
+**Active development — S7 Contracts + Ecosystem Integration. S0–S6 are complete; S7 is the current serial phase.**
 
 The project is deliberately optimizing for **trustworthy intelligence, durable contracts and architectural clarity before feature volume**.
 
