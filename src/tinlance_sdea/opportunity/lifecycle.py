@@ -2,7 +2,6 @@
 
 from ..domain.models import LifecycleState
 
-
 _ALLOWED: dict[LifecycleState, frozenset[LifecycleState]] = {
     LifecycleState.ACTIVE: frozenset(
         {LifecycleState.STALE, LifecycleState.RESOLVED, LifecycleState.EXPIRED}
