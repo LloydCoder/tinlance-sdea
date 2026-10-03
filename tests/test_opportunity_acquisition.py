@@ -71,7 +71,11 @@ def test_acquisition_constraints_and_recommendation() -> None:
     assert recommendation.requires_human_approval
     constraints = (
         AcquisitionConstraint(mode=AcquisitionMode.FDE, allowed=True),
-        AcquisitionConstraint(mode=AcquisitionMode.HIRE, allowed=False),
+        AcquisitionConstraint(
+            mode=AcquisitionMode.HIRE,
+            allowed=False,
+            rationale="Internal hiring is preferred for this capability.",
+        ),
     )
     assert allowed_modes(constraints) == (constraints[0],)
     explanation = AcquisitionExplanation(
