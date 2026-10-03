@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 import pytest
 from pydantic import ValidationError
 
-from tinlance_sdea.adapters import AdapterCapability, AdapterRegistry, SignalAdapter
+from tinlance_sdea.adapters import (\n    AdapterCapability,\n    AdapterHealth,\n    AdapterHealthReport,\n    AdapterRegistry,\n    SignalAdapter,\n)
 from tinlance_sdea.signals import (
     SignalRecord,
     SignalRegistry,
@@ -103,3 +103,4 @@ def test_signal_fingerprint_changes_when_source_event_changes() -> None:
     assert fingerprint_signal(make_signal(source_event_id="evt-a")) != fingerprint_signal(
         make_signal(source_event_id="evt-b")
     )
+\n\ndef test_taxonomy_version_is_explicit() -> None:\n    from tinlance_sdea.signals import SIGNAL_TAXONOMY_VERSION, taxonomy_version\n\n    assert SIGNAL_TAXONOMY_VERSION == "1.0.0"\n    assert taxonomy_version() == SIGNAL_TAXONOMY_VERSION\n
