@@ -117,7 +117,9 @@ def test_epistemic_contracts_and_calibration() -> None:
     assert combine_confidence((0.5, 1.0)) == 0.75
     assert combine_confidence(()) == 0.0
     assert brier_score((0.8, 0.2), (True, False)) == pytest.approx(0.04)
-    assert Contradiction(left_id="a", right_id="b", reason="opposite", severity=0.5).severity == 0.5
+    assert Contradiction(
+        left_id="a", right_id="b", reason="opposite", severity=0.5
+    ).severity == 0.5
     with pytest.raises(ValueError):
         combine_confidence((1.1,))
 
