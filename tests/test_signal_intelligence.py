@@ -4,14 +4,22 @@ from uuid import uuid4
 import pytest
 from pydantic import ValidationError
 
-from tinlance_sdea.adapters import (\n    AdapterCapability,\n    AdapterHealth,\n    AdapterHealthReport,\n    AdapterRegistry,\n    SignalAdapter,\n)
+from tinlance_sdea.adapters import (
+    AdapterCapability,
+    AdapterHealth,
+    AdapterHealthReport,
+    AdapterRegistry,
+    SignalAdapter,
+)
 from tinlance_sdea.signals import (
+    SIGNAL_TAXONOMY_VERSION,
     SignalRecord,
     SignalRegistry,
     SignalType,
     deduplicate_signals,
     fingerprint_signal,
     normalize_signal,
+    taxonomy_version,
     validate_signal,
 )
 
@@ -70,6 +78,7 @@ def test_deduplication_keeps_first_occurrence() -> None:
 def test_signal_registry_rejects_unknown_type() -> None:
     registry = SignalRegistry()
     assert registry.get("hiring") is SignalType.HIRING
+    assert SignalType.HIRING in registry.values()
     with pytest.raises(ValueError):
         registry.get("not-a-signal")
 
@@ -87,6 +96,7 @@ def test_adapter_registry_is_explicit_and_capability_is_bounded() -> None:
     adapter = ExampleAdapter()
     registry.register(adapter)
     assert registry.get("example") is adapter
+    assert registry.all() == (adapter,)
     assert adapter.supports("job_board")
     assert not adapter.supports("funding")
     with pytest.raises(ValueError):
@@ -98,9 +108,23 @@ def test_adapter_registry_is_explicit_and_capability_is_bounded() -> None:
     )
     assert capability.max_batch_size == 100
 
+    report = AdapterHealthReport(
+        adapter_name="example",
+        status=AdapterHealth.HEALTHY,
+        checked_at="2026-10-02T00:00:00Z",
+        message="ok",
+        latency_ms=12.5,
+    )
+    assert report.status is AdapterHealth.HEALTHY
+    assert report.latency_ms == 12.5
+
 
 def test_signal_fingerprint_changes_when_source_event_changes() -> None:
     assert fingerprint_signal(make_signal(source_event_id="evt-a")) != fingerprint_signal(
         make_signal(source_event_id="evt-b")
     )
-\n\ndef test_taxonomy_version_is_explicit() -> None:\n    from tinlance_sdea.signals import SIGNAL_TAXONOMY_VERSION, taxonomy_version\n\n    assert SIGNAL_TAXONOMY_VERSION == "1.0.0"\n    assert taxonomy_version() == SIGNAL_TAXONOMY_VERSION\n
+
+
+def test_taxonomy_version_is_explicit() -> None:
+    assert SIGNAL_TAXONOMY_VERSION == "1.0.0"
+    assert taxonomy_version() == SIGNAL_TAXONOMY_VERSION
