@@ -117,6 +117,8 @@ SDEA recommends; it does not execute outreach, contracting or engineering work.
 
 ## S6 — Closed-Loop Intelligence
 
+**Status: in progress.**
+
 Build:
 - outcome events
 - attribution
