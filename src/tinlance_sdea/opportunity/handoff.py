@@ -10,6 +10,7 @@ def make_handoff(
     entity_id: str,
     capability_id: str,
     confidence: float,
+    evidence_ids: tuple[UUID, ...],
     rationale: str,
 ) -> OpportunityHandoff:
     return OpportunityHandoff(
@@ -17,5 +18,6 @@ def make_handoff(
         entity_id=entity_id,
         capability_id=capability_id,
         confidence=confidence,
+        evidence_ids=evidence_ids,
         rationale=rationale,
     )
