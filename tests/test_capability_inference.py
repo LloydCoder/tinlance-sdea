@@ -1,5 +1,5 @@
-from datetime import UTC, datetime
-from uuid import uuid4
+from collections.abc import Mapping\nfrom datetime import UTC, datetime
+from typing import Any\nfrom uuid import uuid4
 
 import pytest
 
