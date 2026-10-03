@@ -21,12 +21,8 @@ _ALLOWED: dict[LifecycleState, frozenset[LifecycleState]] = {
             LifecycleState.RETRACTED,
         }
     ),
-    LifecycleState.RESOLVED: frozenset(
-        {LifecycleState.SUPERSEDED, LifecycleState.RETRACTED}
-    ),
-    LifecycleState.EXPIRED: frozenset(
-        {LifecycleState.SUPERSEDED, LifecycleState.RETRACTED}
-    ),
+    LifecycleState.RESOLVED: frozenset({LifecycleState.SUPERSEDED, LifecycleState.RETRACTED}),
+    LifecycleState.EXPIRED: frozenset({LifecycleState.SUPERSEDED, LifecycleState.RETRACTED}),
     LifecycleState.SUPERSEDED: frozenset({LifecycleState.RETRACTED}),
     LifecycleState.RETRACTED: frozenset(),
 }
