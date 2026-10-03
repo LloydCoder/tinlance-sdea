@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 from pydantic import ValidationError
@@ -46,8 +46,8 @@ def test_opportunity_can_recommend_multiple_acquisition_modes() -> None:
 def test_evidence_separates_epistemic_and_lifecycle_state() -> None:
     evidence = Evidence(
         source_type="funding",
-        observed_at=datetime(2026, 10, 1, tzinfo=timezone.utc),
-        collected_at=datetime(2026, 10, 2, tzinfo=timezone.utc),
+        observed_at=datetime(2026, 10, 1, tzinfo=UTC),
+        collected_at=datetime(2026, 10, 2, tzinfo=UTC),
         title="Funding announcement",
         epistemic_state=EpistemicState.OBSERVED,
     )
@@ -60,8 +60,8 @@ def test_evidence_rejects_collection_before_observation() -> None:
     with pytest.raises(ValidationError):
         Evidence(
             source_type="funding",
-            observed_at=datetime(2026, 10, 2, tzinfo=timezone.utc),
-            collected_at=datetime(2026, 10, 1, tzinfo=timezone.utc),
+            observed_at=datetime(2026, 10, 2, tzinfo=UTC),
+            collected_at=datetime(2026, 10, 1, tzinfo=UTC),
             title="Invalid chronology",
         )
 
@@ -91,8 +91,8 @@ def test_entity_resolution_returns_none_for_unknown_entity() -> None:
 def test_evidence_fingerprint_is_stable() -> None:
     evidence = Evidence(
         source_type="funding",
-        observed_at=datetime(2026, 10, 1, tzinfo=timezone.utc),
-        collected_at=datetime(2026, 10, 2, tzinfo=timezone.utc),
+        observed_at=datetime(2026, 10, 1, tzinfo=UTC),
+        collected_at=datetime(2026, 10, 2, tzinfo=UTC),
         title="Funding announcement",
     )
     assert fingerprint_evidence(evidence) == fingerprint_evidence(evidence)
@@ -102,7 +102,7 @@ def test_provenance_and_reliability_contracts_bound_confidence() -> None:
     provenance = Provenance(
         source_name="example",
         source_type="public_web",
-        collected_at=datetime(2026, 10, 2, tzinfo=timezone.utc),
+        collected_at=datetime(2026, 10, 2, tzinfo=UTC),
         collector="adapter:test",
     )
     reliability = SourceReliability(
