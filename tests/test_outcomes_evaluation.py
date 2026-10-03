@@ -23,9 +23,7 @@ from tinlance_sdea.outcomes import (
 
 def test_outcome_event_attribution_and_feedback() -> None:
     opportunity_id = uuid4()
-    event = record_event(
-        opportunity_id, "accepted", datetime(2026, 10, 1, tzinfo=UTC)
-    )
+    event = record_event(opportunity_id, "accepted", datetime(2026, 10, 1, tzinfo=UTC))
     assert event.opportunity_id == opportunity_id
     attribution = attribute(
         opportunity_id,
