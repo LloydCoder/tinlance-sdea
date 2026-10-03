@@ -4,5 +4,5 @@ from .._shared import IntegrationContract
 
 
 class ReconOSContract(IntegrationContract):
-    consumer = "reconos"
-    purpose = "account/entity intelligence input"
+    consumer: str = "reconos"
+    purpose: str = "account/entity intelligence input"
