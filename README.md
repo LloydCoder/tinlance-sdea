@@ -399,7 +399,7 @@ SDEA's intelligence layer must never be treated as an authorization boundary.
 
 ## Project status
 
-**Active development — S3 Fusion + Temporal + Epistemics. S0–S2 are complete; S3 is the current serial phase.**
+**Active development — S4 Capability Intelligence. S0–S3 are complete; S4 is the current serial phase.**
 
 The project is deliberately optimizing for **trustworthy intelligence, durable contracts and architectural clarity before feature volume**.
 
