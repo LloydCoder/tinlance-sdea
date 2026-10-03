@@ -133,6 +133,8 @@ The objective is to measure whether intelligence was useful, not merely whether 
 
 ## S7 — Contracts + Ecosystem Integration
 
+**Status: in progress.**
+
 Build:
 - versioned serialization contracts
 - JSON Schema
