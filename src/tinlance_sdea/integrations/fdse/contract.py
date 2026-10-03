@@ -4,5 +4,5 @@ from .._shared import IntegrationContract
 
 
 class FDSEContract(IntegrationContract):
-    consumer = "fdse"
-    purpose = "engineering-delivery handoff"
+    consumer: str = "fdse"
+    purpose: str = "engineering-delivery handoff"
