@@ -24,7 +24,7 @@ class EntityIdentifier(SDEAModel):
     value: str
 
     @model_validator(mode="after")
-    def validate_non_empty(self) -> "EntityIdentifier":
+    def validate_non_empty(self) -> EntityIdentifier:
         if not self.scheme or not self.value:
             raise ValueError("entity identifier scheme and value must be non-empty")
         return self
@@ -45,7 +45,7 @@ class Entity(SDEAModel):
     metadata: dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
-    def validate_name(self) -> "Entity":
+    def validate_name(self) -> Entity:
         if not self.canonical_name.strip():
             raise ValueError("canonical_name must be non-empty")
         return self
