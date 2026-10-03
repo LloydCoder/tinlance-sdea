@@ -10,7 +10,6 @@ from tinlance_sdea.acquisition import (
     recommend,
 )
 from tinlance_sdea.domain.models import AcquisitionMode, LifecycleState, Opportunity
-from tinlance_sdea.acquisition.models import AcquisitionRecommendationRecord
 from tinlance_sdea.opportunity import (
     OpportunityExplanation,
     OpportunityGraph,
