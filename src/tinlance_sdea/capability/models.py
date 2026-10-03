@@ -1,5 +1,7 @@
 """Capability ontology contracts."""
 
+from __future__ import annotations
+
 from pydantic import Field, model_validator
 
 from ..contracts.versions import validate_version
