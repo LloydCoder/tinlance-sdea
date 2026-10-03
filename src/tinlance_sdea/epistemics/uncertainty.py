@@ -16,8 +16,4 @@ class Uncertainty(SDEAModel):
 def uncertainty_score(value: Uncertainty) -> float:
     """Return a conservative arithmetic mean."""
 
-    return (
-        value.evidence_coverage
-        + value.source_agreement
-        + value.temporal_stability
-    ) / 3.0
+    return (value.evidence_coverage + value.source_agreement + value.temporal_stability) / 3.0
