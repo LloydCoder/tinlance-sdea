@@ -238,9 +238,27 @@ As the system matures, invariants should expand to cover:
 - recommendation traceability
 - contract-version compatibility
 
-## 12. Model boundary
+## 12. Canonical signal-intelligence layer
 
-The domain model must remain independent of:
+S2 introduces a source-normalized `SignalRecord` alongside the broader domain `Signal` contract.
+
+A `SignalRecord` contains:
+
+- canonical entity identity
+- versioned signal type
+- source event identifier
+- occurrence and observation timestamps
+- one or more evidence identifiers
+- normalized scalar attributes
+- optional deterministic fingerprint
+
+The signal taxonomy is source-agnostic and currently versioned as `1.0.0`. Source adapters must map provider-specific payloads into these canonical types.
+
+Signal identity is derived from stable semantic fields rather than collection UUIDs. Deduplication therefore removes repeated representations of the same normalized source event without deleting the underlying evidence.
+
+## 13. Model boundary
+
+The domain and signal contracts must remain independent of:
 
 - CRM schemas
 - outreach providers
