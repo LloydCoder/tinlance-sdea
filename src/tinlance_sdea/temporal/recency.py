@@ -1,6 +1,6 @@
 """Recency scoring."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from math import exp
 
 
@@ -16,4 +16,4 @@ def recency_score(*, observed_at: datetime, now: datetime, half_life_days: float
 def utc_now() -> datetime:
     """Return an offset-aware UTC timestamp."""
 
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
