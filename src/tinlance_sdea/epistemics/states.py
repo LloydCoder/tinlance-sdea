@@ -13,9 +13,7 @@ class EpistemicAssessment(SDEAModel):
     rationale: str
 
 
-def assess(
-    state: EpistemicState, confidence: float, rationale: str
-) -> EpistemicAssessment:
+def assess(state: EpistemicState, confidence: float, rationale: str) -> EpistemicAssessment:
     """Create a validated epistemic assessment."""
 
     return EpistemicAssessment(state=state, confidence=confidence, rationale=rationale)
