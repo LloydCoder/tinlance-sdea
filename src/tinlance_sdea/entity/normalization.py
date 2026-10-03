@@ -1,15 +1,21 @@
 """Deterministic entity-name normalization helpers."""
 
-import re
 import unicodedata
-
-_WHITESPACE = re.compile(r"\s+")
-_NON_ALNUM = re.compile(r"[^a-z0-9]+")
 
 
 def normalize_entity_name(value: str) -> str:
-    """Normalize an entity name for deterministic comparison, not display."""
+    """Normalize an entity name for comparison without discarding Unicode text."""
 
-    normalized = unicodedata.normalize("NFKC", value).strip().casefold()
-    normalized = _NON_ALNUM.sub(" ", normalized)
-    return _WHITESPACE.sub(" ", normalized).strip()
+    normalized = unicodedata.normalize("NFKC", value).casefold().strip()
+    output: list[str] = []
+    previous_space = False
+    for char in normalized:
+        category = unicodedata.category(char)
+        if category[0] in {"L", "N"}:
+            output.append(char)
+            previous_space = False
+        else:
+            if not previous_space:
+                output.append(" ")
+            previous_space = True
+    return "".join(output).strip()
