@@ -11,6 +11,7 @@ from .semantic_conventions import (
     ENTITY_ID,
     EVIDENCE_ID,
     OPPORTUNITY_ID,
+    SCHEMA_URL,
     SCHEMA_VERSION,
     SIGNAL_TYPE,
 )
@@ -22,6 +23,7 @@ __all__ = [
     "INFERENCE_CALIBRATED",
     "OPPORTUNITY_CREATED",
     "OPPORTUNITY_ID",
+    "SCHEMA_URL",
     "SCHEMA_VERSION",
     "SIGNAL_FUSED",
     "SIGNAL_INGESTED",
