@@ -1,7 +1,9 @@
 """Time interval contracts."""
 
 from datetime import datetime
+
 from pydantic import model_validator
+
 from ..domain.models import SDEAModel
 
 
