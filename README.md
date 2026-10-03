@@ -308,7 +308,7 @@ tinlance-sdea/
 └── README.md
 ```
 
-The repository now has a substantive M1 foundation in `entity/` and `evidence/`. Other package directories remain architectural seams until their milestone is implemented.
+The repository now has substantive S1 entity/evidence foundations and an implemented S2 signal-intelligence layer. `signals/` owns canonical signal semantics; `adapters/` owns source-adapter extension contracts. Later packages remain architectural seams until their milestone is implemented.
 
 ## Engineering invariants
 
@@ -334,19 +334,19 @@ SDEA is intentionally built in controlled milestones.
 ### M1 — Signal foundation
 Normalize heterogeneous sources into stable signal contracts; add source adapters, provenance references, deduplication and source reliability metadata.
 
-### M2 — Evidence and fusion
+### S3 — Fusion + Temporal + Epistemics
 Build evidence relationships, signal clustering, correlation, contradiction handling and temporal reasoning.
 
-### M3 — Demand and capability inference
+### S4 — Capability Intelligence
 Introduce demand hypotheses, capability ontology, capability inference, explainability and confidence calibration.
 
-### M4 — Opportunity intelligence
+### S5 — Opportunity Intelligence
 Introduce opportunity qualification, buying windows, opportunity decay and acquisition-mode recommendations.
 
-### M5 — Integrations
+### S7 — Contracts + Ecosystem Integration
 Connect TADS, ReconOS, FadeReach, FDSE/FDE and domain-specific signal adapters through explicit versioned contracts.
 
-### M6 — Evaluation and enterprise hardening
+### S6/S8 — Closed-Loop Intelligence + Enterprise Hardening
 Add benchmark cases, precision/recall analysis, calibration, auditability, observability, policy controls, cost controls and multi-tenant boundaries where required.
 
 **Rule:** each milestone must leave the repository testable, documented and internally coherent. New integrations must not be allowed to redefine SDEA's core semantics.
@@ -399,7 +399,7 @@ SDEA's intelligence layer must never be treated as an authorization boundary.
 
 ## Project status
 
-**Active development — M1 Entity + Evidence Foundation.**
+**Active development — S2 Signal Intelligence. S0 and S1 are complete; S2 is the current serial phase.**
 
 The project is deliberately optimizing for **trustworthy intelligence, durable contracts and architectural clarity before feature volume**.
 
