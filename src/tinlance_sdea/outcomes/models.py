@@ -2,7 +2,9 @@
 
 from datetime import datetime
 from uuid import UUID
+
 from pydantic import Field
+
 from ..domain.models import SDEAModel
 
 
@@ -12,7 +14,7 @@ class OutcomeEvent(SDEAModel):
     event_type: str
     occurred_at: datetime
     value: float | None = None
-    metadata: dict[str, str] = {}
+    metadata: dict[str, str] = Field(default_factory=dict)
 
 
 class OutcomeAttribution(SDEAModel):
