@@ -85,6 +85,8 @@ Exit: SDEA can explain why multiple observations represent meaningful organizati
 
 ## S4 — Capability Intelligence
 
+**Status: in progress.**
+
 Build:
 - capability ontology and taxonomy
 - aliases and relationships
