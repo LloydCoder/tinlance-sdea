@@ -259,17 +259,21 @@ Model-assisted inference must remain measurable, reviewable and replaceable. NIS
 
 ## 8. Current implementation boundary
 
-M0 currently implements the canonical domain foundation:
+S0 and S1 implement the canonical domain and entity/evidence foundations. S2 adds deterministic signal intelligence:
 
-- Pydantic v2 contracts
-- immutable/forbid-extra canonical models
-- bounded confidence fields
-- acquisition-mode taxonomy
-- evidence-linked opportunities
-- explicit demand rationale
-- CI quality gates
+- canonical signal taxonomy with explicit version
+- normalized signal records
+- chronology and evidence validation
+- deterministic signal fingerprints
+- deterministic deduplication
+- signal-type registry
+- source-adapter interface
+- adapter capability, registry and health contracts
+- CI quality gates across Python 3.12–3.14
 
-The surrounding package directories are reserved architectural seams. They should be implemented incrementally rather than populated with speculative infrastructure.
+The surrounding fusion, temporal, inference, opportunity and integration packages remain reserved seams until their serial phases are implemented.
+
+The signal-adapter boundary is intentionally narrow: adapters translate source payloads into canonical signals; they do not own crawling policy, commercial workflows, inference authority or execution.
 
 ## 9. Architectural rule
 
