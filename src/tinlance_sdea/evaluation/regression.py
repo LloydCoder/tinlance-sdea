@@ -1,6 +1,7 @@
 """Regression evaluation contracts."""
 
 from pydantic import Field
+
 from ..domain.models import SDEAModel
 
 
