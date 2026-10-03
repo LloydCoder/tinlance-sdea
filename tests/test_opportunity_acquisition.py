@@ -10,6 +10,7 @@ from tinlance_sdea.acquisition import (
     recommend,
 )
 from tinlance_sdea.domain.models import AcquisitionMode, LifecycleState, Opportunity
+from tinlance_sdea.acquisition.models import AcquisitionRecommendationRecord
 from tinlance_sdea.opportunity import (
     OpportunityExplanation,
     OpportunityGraph,
@@ -101,7 +102,7 @@ def test_secondary_acquisition_contracts_preserve_governance() -> None:
             0.8,
             "",
         )
-    from tinlance_sdea.acquisition.models import AcquisitionConstraint, AcquisitionRecommendationRecord
+    from tinlance_sdea.acquisition.models import AcquisitionRecommendationRecord
 
     with pytest.raises(ValueError):
         AcquisitionConstraint(mode=AcquisitionMode.HIRE, allowed=False)
