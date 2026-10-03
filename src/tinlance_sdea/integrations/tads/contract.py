@@ -4,5 +4,5 @@ from .._shared import IntegrationContract
 
 
 class TADSContract(IntegrationContract):
-    consumer = "tads"
-    purpose = "demand-intelligence workflow consumption"
+    consumer: str = "tads"
+    purpose: str = "demand-intelligence workflow consumption"
