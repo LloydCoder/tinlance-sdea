@@ -1,5 +1,7 @@
 """Human adjudication contracts."""
 
+from __future__ import annotations
+
 from pydantic import Field, model_validator
 
 from ..domain.models import SDEAModel
