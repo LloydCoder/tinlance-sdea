@@ -1,252 +1,189 @@
-# Roadmap
+# SDEA Roadmap
 
-SDEA is built as a permanent intelligence substrate. The roadmap therefore prioritizes **semantic correctness, evidence quality and stable contracts before broad automation**.
+SDEA is a permanent intelligence substrate. Delivery prioritizes semantic correctness, evidence quality, stable contracts, evaluation and explicit ownership boundaries before broad automation.
 
 ## Delivery law
 
-Every milestone follows:
+Every phase follows:
 
-```text
+```
 contract → implementation → tests → evaluation → documentation → integration
 ```
 
-No milestone is considered complete merely because code exists. It must be internally testable and documented.
+A phase is complete only when its implementation, tests, documentation and CI/workflow are green.
 
----
+## S0 — Foundation
 
-## M0 — Foundation
+**Status: complete.**
 
-**Objective:** establish the permanent repository boundary and canonical domain language.
-
-### Delivered foundation
-
-- permanent SDEA repository
-- domain package
-- canonical Pydantic contracts
-- evidence/demand invariants
+Delivered:
+- permanent SDEA repository boundary
+- canonical Pydantic domain contracts
+- domain invariants
 - acquisition-mode taxonomy
-- architecture and domain documentation
-- ADR discipline
-- CI with linting, formatting, typing and coverage
+- ADR and architecture documentation
+- Python 3.12–3.14 CI with Ruff, strict MyPy, pytest and coverage
 
-### Exit criteria
+## S1 — Entity + Evidence Foundation
 
-- canonical contracts are documented
-- invariants have tests
-- CI is reproducible across supported Python versions
-- ownership boundaries are explicit
-- no downstream system's authority is duplicated
+**Status: complete.**
 
----
-
-## M1 — Signal foundation
-
-**Objective:** convert heterogeneous organizational observations into stable, provenance-aware signals.
-
-### Work
-
-- signal normalization contract
-- source-adapter interface
+Delivered:
+- canonical entity identity and aliases
+- deterministic entity normalization/resolution
+- epistemic/lifecycle state separation
+- chronology validation
+- evidence provenance contracts
+- deterministic evidence fingerprinting
 - source reliability metadata
-- provenance references
-- deterministic identity/fingerprinting
+- S1 tests and documentation reconciliation
+
+Exit condition: an observation can be attached to a canonical entity and its supporting evidence can be traced, fingerprinted and interpreted without conflating certainty with lifecycle.
+
+## S2 — Signal Intelligence
+
+**Status: in progress.**
+
+Objective: convert heterogeneous organizational observations into deterministic, provenance-aware canonical signals.
+
+Work:
+- canonical signal taxonomy and version
+- normalized signal record
+- deterministic normalization
+- chronology and evidence validation
+- deterministic signal fingerprints
 - deduplication
-- canonical signal taxonomy
-- event timestamps versus observation timestamps
-- source-specific adapters without source-specific semantics leaking into the domain
+- signal registry
+- source-adapter interface
+- adapter capabilities and health contracts
+- adapter registry
+- integration-safe tests
 
-### Exit criteria
-
-- the same source event does not create uncontrolled duplicate signals
+Exit criteria:
+- every normalized signal has evidence lineage
 - signal identity is deterministic enough for reconciliation
-- every normalized signal can trace to supporting evidence
-- adapters can be added without changing core domain semantics
+- taxonomy is explicit and versioned
+- duplicate source events can be collapsed deterministically
+- adapters can be added without changing canonical signal semantics
+- CI is green across the supported Python matrix
 
----
+## S3 — Fusion + Temporal + Epistemics
 
-## M2 — Evidence and fusion
-
-**Objective:** turn individual signals into evidence-backed change patterns.
-
-### Work
-
-- evidence relationship model
-- signal correlation
-- clustering
-- source diversity
+Build:
+- signal correlation and clustering
+- source-diversity weighting
+- derivative/copy detection
 - contradiction representation
-- duplicate/derivative-source detection
-- temporal windows
-- evidence-weighting policy
-- fusion provenance
+- temporal intervals, recency, persistence and acceleration
+- decay and buying-window derivation
+- explicit epistemic uncertainty and confidence calibration
+- fusion explanations and provenance
 
-### Exit criteria
+Exit: SDEA can explain why multiple observations represent meaningful organizational change without double-counting or hiding contradictions.
 
-- fused results explain which evidence contributed
-- copied versions of one event are not treated as independent corroboration
-- contradictory observations remain visible
-- temporal relationships are reproducible
+## S4 — Capability Intelligence
 
----
+Build:
+- capability ontology and taxonomy
+- aliases and relationships
+- capability normalization and versioning
+- demand hypotheses
+- demand/capability inference strategies
+- rule/model gateway
+- explainability
+- uncertainty and calibration
 
-## M3 — Demand and capability inference
+LLMs or other models remain replaceable inference components; they do not become domain authority.
 
-**Objective:** infer plausible capability demand without presenting inference as fact.
+## S5 — Opportunity Intelligence
 
-### Work
-
-- demand-hypothesis lifecycle
-- capability ontology
-- capability normalization
-- title-to-capability decoding
-- capability relationships
-- inference strategies
-- confidence calibration
-- explanation generation
-- unknown/insufficient-evidence outcomes
-
-### Exit criteria
-
-- hypotheses are falsifiable
-- capability mappings are versioned
-- confidence can be evaluated against labeled cases
-- insufficient evidence produces uncertainty rather than fabricated certainty
-- model-assisted reasoning remains replaceable
-
----
-
-## M4 — Opportunity intelligence
-
-**Objective:** turn evidence-backed capability demand into qualified opportunity intelligence.
-
-### Work
-
+Build:
 - opportunity graph
-- buying-window derivation
-- opportunity lifecycle
+- qualification
+- lifecycle
+- buying windows
 - opportunity decay
-- qualification rules
-- acquisition-mode recommendations
-- opportunity explanations
+- acquisition-mode reasoning
+- explanation
 - downstream handoff contract
 
-### Exit criteria
+SDEA recommends; it does not execute outreach, contracting or engineering work.
 
-- every opportunity is evidence-traceable
-- buying windows expose uncertainty
-- stale opportunities can decay without deletion of history
-- acquisition recommendations are advisory
-- no outreach or execution occurs inside SDEA
+## S6 — Closed-Loop Intelligence
 
----
-
-## M5 — Integrations
-
-**Objective:** connect SDEA to the Tinlance ecosystem through explicit contracts.
-
-### Integrations
-
-- **TADS** — primary product/workflow consumer
-- **ReconOS** — reconnaissance and enrichment input
-- **FadeReach** — commercial engagement handoff
-- **FDSE/FDE** — engineering-delivery handoff
-- **Domain adapters** — reusable signal ingestion interfaces
-
-### Exit criteria
-
-- integration contracts are versioned
-- failures do not corrupt canonical intelligence
-- retries are idempotent where appropriate
-- external systems cannot silently redefine SDEA semantics
-- no integration grants SDEA hidden execution authority
-
----
-
-## M6 — Evaluation and enterprise hardening
-
-**Objective:** make SDEA measurable, auditable and production-ready.
-
-### Evaluation
-
+Build:
+- outcome events
+- attribution
+- accepted/rejected opportunity feedback
+- calibration learning
 - curated benchmark cases
-- signal normalization accuracy
-- evidence traceability
-- deduplication precision
-- contradiction handling
-- demand inference precision/recall
-- capability mapping accuracy
-- confidence calibration
-- opportunity qualification quality
-- buying-window usefulness
-- downstream commercial outcome measurement
+- regression tests
+- adjudication workflows
+- precision/recall and calibration measurement
 
-### Hardening
+The objective is to measure whether intelligence was useful, not merely whether signals were collected.
 
-- structured audit trail
-- policy enforcement
-- observability
-- dependency/supply-chain controls
-- secret management
-- tenant isolation where required
+## S7 — Contracts + Ecosystem Integration
+
+Build:
+- versioned serialization contracts
+- JSON Schema
+- compatibility rules
+- event contracts
+- TADS integration
+- ReconOS input contract
+- FadeReach opportunity handoff
+- FDSE/FDE handoff
+- domain-adapter integration contracts
+
+External systems may consume or provide intelligence but cannot redefine SDEA semantics or grant SDEA execution authority.
+
+## S8 — Enterprise Hardening
+
+Build:
+- provenance integrity and reconstruction
+- data classification
 - retention/deletion controls
-- cost controls
-- rate limits
-- provenance integrity
-- model/provider abstraction
+- redaction
+- tenant boundaries where required
+- SDEA-specific observability
+- operational policy controls
+- rate/cost controls
+- dependency and supply-chain controls
+- security testing
 - reproducible evaluation
-
-### Exit criteria
-
-- critical inference paths are benchmarked
-- quality regressions are detectable in CI or scheduled evaluation
-- important decisions can be reconstructed from evidence
-- operational failures are observable
-- enterprise boundaries are explicit and testable
-
----
-
-## Future extensions
-
-These are **post-M6 possibilities**, not commitments to implement them prematurely:
-
-- continuous opportunity monitoring
-- cross-domain capability graphs
-- market-level demand patterns
-- account-level temporal state
-- learning from accepted/rejected opportunities
-- outcome-aware calibration
-- scenario simulation
-- customer-specific policy overlays
-- sector-specific ontologies
-- privacy-preserving intelligence sharing
-
-Future extensions must preserve the core distinction between observation, evidence, inference and action.
+- contract compatibility testing
+- production-readiness audit
 
 ## Anti-roadmap
 
-The following are explicitly not roadmap objectives for SDEA:
+SDEA will not become:
+- a CRM
+- an outreach engine
+- a generic crawler/scraper platform
+- an account-enrichment replacement for ReconOS
+- an agent runtime
+- an engineering execution engine
+- an authorization/approval authority
+- a replacement for TADS, ReconOS, FadeReach, FDSE or Agent Platform
 
-- becoming a CRM
-- building a generic crawler platform
-- owning outbound messaging
-- executing customer code
-- replacing Agent Platform
-- replacing Agent OS
-- replacing ReconOS
-- replacing TADS
-- embedding all commercial workflow logic in the intelligence layer
-
-If a proposed feature pushes SDEA across one of these boundaries, create an ADR before implementation.
+Any feature that crosses a permanent boundary requires an ADR before implementation.
 
 ## Definition of done
 
-A milestone is complete only when:
+A phase is complete only when:
 
-1. contracts are documented;
+1. canonical contracts are documented;
 2. implementation is tested;
 3. invariants are enforced;
-4. evaluation evidence exists where applicable;
+4. relevant evaluation evidence exists;
 5. documentation matches the implementation;
-6. CI is green;
+6. CI/workflows are green;
 7. ownership boundaries remain intact;
 8. integration behavior is explicit and recoverable.
+
+Schema evolution must remain explicit and versioned. This follows the general lesson from OpenTelemetry's schema model: producers and consumers need a stable way to evolve contracts without silently breaking interpretation. urlOpenTelemetry Telemetry Schemashttps://opentelemetry.io/docs/specs/otel/schemas/
+
+Provenance should remain rich enough to describe entities, activities, agents and derivations where applicable, consistent with the W3C PROV model. urlW3C PROV publicationshttps://www.w3.org/groups/wg/prov/publications/
+
+Evaluation is a first-class engineering concern. NIST's AI measurement/evaluation guidance emphasizes documented metrics, test sets and repeatable TEVV practices for trustworthy AI systems. urlNIST AI measurement and evaluationhttps://www.nist.gov/ai-measurement-and-evaluation
