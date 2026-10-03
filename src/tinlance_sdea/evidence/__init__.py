@@ -1,4 +1,7 @@
-"""SDEA evidence boundary.
+"""Evidence provenance, identity and reliability helpers."""
 
-Implementation is intentionally introduced incrementally behind stable domain contracts.
-"""
+from .fingerprint import fingerprint_evidence
+from .provenance import Provenance
+from .reliability import SourceReliability
+
+__all__ = ["Provenance", "SourceReliability", "fingerprint_evidence"]
