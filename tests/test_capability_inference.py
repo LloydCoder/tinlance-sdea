@@ -5,9 +5,6 @@ from uuid import uuid4
 
 import pytest
 
-from tinlance_sdea.inference.model_gateway import InferenceModel
-import pytest
-
 from tinlance_sdea.capability import (
     CAPABILITY_TAXONOMY_VERSION,
     Capability,
@@ -29,6 +26,7 @@ from tinlance_sdea.inference import (
     rule_match,
     validate_hypothesis,
 )
+from tinlance_sdea.inference.model_gateway import InferenceModel
 from tinlance_sdea.signals import SignalType, normalize_signal
 
 
