@@ -265,7 +265,9 @@ The current domain layer establishes these core contracts:
 
 The canonical enums currently include:
 
-- `EvidenceState`
+- `EpistemicState`
+- `LifecycleState`
+- `EvidenceState` (compatibility alias)
 - `AcquisitionMode`
 - `SourceType`
 
@@ -306,7 +308,7 @@ tinlance-sdea/
 └── README.md
 ```
 
-The package directories beyond `domain/` are architectural seams; they do not imply that every subsystem is already implemented.
+The repository now has a substantive M1 foundation in `entity/` and `evidence/`. Other package directories remain architectural seams until their milestone is implemented.
 
 ## Engineering invariants
 
@@ -397,7 +399,7 @@ SDEA's intelligence layer must never be treated as an authorization boundary.
 
 ## Project status
 
-**Active development — M0 foundation.**
+**Active development — M1 Entity + Evidence Foundation.**
 
 The project is deliberately optimizing for **trustworthy intelligence, durable contracts and architectural clarity before feature volume**.
 
