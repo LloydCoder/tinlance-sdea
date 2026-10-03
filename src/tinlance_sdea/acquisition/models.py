@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from uuid import UUID
+
 from pydantic import Field, model_validator
 
 from ..domain.models import AcquisitionMode, SDEAModel
@@ -20,7 +22,7 @@ class AcquisitionConstraint(SDEAModel):
 
 
 class AcquisitionRecommendationRecord(SDEAModel):
-    opportunity_id: str
+    opportunity_id: UUID
     mode: AcquisitionMode
     confidence: float = Field(ge=0.0, le=1.0)
     rationale: str
