@@ -308,7 +308,7 @@ tinlance-sdea/
 └── README.md
 ```
 
-The repository now has substantive S1 entity/evidence foundations and an implemented S2 signal-intelligence layer. `signals/` owns canonical signal semantics; `adapters/` owns source-adapter extension contracts. Later packages remain architectural seams until their milestone is implemented.
+The repository now has substantive S1 entity/evidence foundations, S2 signal intelligence, and an S3 deterministic fusion/temporal/epistemic foundation. `signals/` owns canonical signal semantics; `adapters/` owns source-adapter extension contracts; `fusion/`, `temporal/` and `epistemics/` own deterministic reasoning primitives. Later packages remain architectural seams until their milestone is implemented.
 
 ## Engineering invariants
 
@@ -399,7 +399,7 @@ SDEA's intelligence layer must never be treated as an authorization boundary.
 
 ## Project status
 
-**Active development — S2 Signal Intelligence. S0 and S1 are complete; S2 is the current serial phase.**
+**Active development — S3 Fusion + Temporal + Epistemics. S0–S2 are complete; S3 is the current serial phase.**
 
 The project is deliberately optimizing for **trustworthy intelligence, durable contracts and architectural clarity before feature volume**.
 
