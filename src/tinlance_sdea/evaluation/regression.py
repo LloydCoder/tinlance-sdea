@@ -1,5 +1,7 @@
 """Regression evaluation contracts."""
 
+from __future__ import annotations
+
 from collections.abc import Iterable
 
 from pydantic import Field, model_validator
