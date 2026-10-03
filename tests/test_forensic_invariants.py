@@ -153,3 +153,69 @@ def test_evaluation_and_lifecycle_edges() -> None:
 
 def test_governance_lattice_is_monotonic() -> None:
     assert DataClass.RESTRICTED != DataClass.PUBLIC
+
+
+def test_opportunity_record_and_handoff_invariants() -> None:
+    from tinlance_sdea.opportunity.models import OpportunityHandoff, OpportunityRecord
+
+    evidence_id = uuid4()
+    record = OpportunityRecord(
+        id=uuid4(),
+        entity_id="org:example",
+        capability_id="platform",
+        confidence=0.8,
+        evidence_ids=(evidence_id,),
+        rationale="Evidence-backed opportunity.",
+    )
+    handoff = OpportunityHandoff(
+        opportunity_id=uuid4(),
+        entity_id="org:example",
+        capability_id="platform",
+        confidence=0.8,
+        evidence_ids=(evidence_id,),
+        rationale="Evidence-backed handoff.",
+    )
+    assert record.evidence_ids == handoff.evidence_ids
+    with pytest.raises(ValidationError):
+        OpportunityRecord(
+            id=uuid4(),
+            entity_id="org:example",
+            capability_id="platform",
+            confidence=0.8,
+            evidence_ids=(),
+            rationale="missing",
+        )
+    with pytest.raises(ValidationError):
+        OpportunityHandoff(
+            opportunity_id=uuid4(),
+            entity_id="org:example",
+            capability_id="platform",
+            confidence=0.8,
+            evidence_ids=(),
+            rationale="missing",
+        )
+
+
+def test_integration_and_trace_edge_cases() -> None:
+    with pytest.raises(ValidationError):
+        IntegrationContract(
+            consumer="consumer",
+            purpose="purpose",
+            allowed_actions=("write", "write"),
+        )
+    with pytest.raises(ValueError):
+        TraceContext(trace_id="trace", span_id="span").child(" ")
+
+
+def test_temporal_decay_and_reliability_edges() -> None:
+    from tinlance_sdea.temporal import decay_score
+
+    with pytest.raises(ValueError):
+        decay_score(age_days=-1, half_life_days=7)
+    with pytest.raises(ValueError):
+        SourceReliability(
+            source_name="source",
+            reliability=0.5,
+            rationale="valid",
+            assessed_at=datetime(2026, 10, 1),
+        )
