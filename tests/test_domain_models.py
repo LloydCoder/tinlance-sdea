@@ -113,3 +113,134 @@ def test_provenance_and_reliability_contracts_bound_confidence() -> None:
     )
     assert provenance.collector == "adapter:test"
     assert reliability.reliability == 0.8
+
+
+def test_domain_contracts_validate_temporal_and_confidence_boundaries() -> None:
+    from tinlance_sdea.domain.models import (
+        BuyingWindow,
+        CapabilityNeed,
+        Signal,
+        SignalCluster,
+    )
+
+    signal_id = Signal(
+        entity_id="org:example",
+        signal_type="funding",
+        occurred_at=datetime(2026, 10, 1, tzinfo=UTC),
+        observed_at=datetime(2026, 10, 2, tzinfo=UTC),
+    ).id
+    cluster = SignalCluster(
+        entity_id="org:example",
+        signal_ids=(signal_id,),
+        first_observed_at=datetime(2026, 10, 1, tzinfo=UTC),
+        last_observed_at=datetime(2026, 10, 2, tzinfo=UTC),
+        confidence=0.9,
+    )
+    hypothesis = DemandHypothesis(
+        entity_id="org:example",
+        statement="A platform need may be emerging.",
+        confidence=0.8,
+        rationale="Funding and technology signals align.",
+    )
+    capability = CapabilityNeed(
+        entity_id="org:example",
+        capability="platform engineering",
+        demand_hypothesis_id=hypothesis.id,
+        confidence=0.8,
+        urgency=0.7,
+        why_now="Recent infrastructure expansion.",
+    )
+    window = BuyingWindow(
+        status="emerging",
+        starts_at=datetime(2026, 10, 1, tzinfo=UTC),
+        ends_at=datetime(2026, 11, 1, tzinfo=UTC),
+        confidence=0.7,
+        rationale="Recent signals indicate a near-term window.",
+    )
+    assert cluster.last_observed_at > cluster.first_observed_at
+    assert capability.urgency == 0.7
+    assert window.ends_at is not None
+
+
+def test_invalid_intervals_and_confidence_are_rejected() -> None:
+    from tinlance_sdea.domain.models import BuyingWindow, SignalCluster
+
+    with pytest.raises(ValidationError):
+        SignalCluster(
+            entity_id="org:example",
+            signal_ids=(),
+            first_observed_at=datetime(2026, 10, 2, tzinfo=UTC),
+            last_observed_at=datetime(2026, 10, 1, tzinfo=UTC),
+            confidence=0.5,
+        )
+    with pytest.raises(ValidationError):
+        BuyingWindow(
+            status="invalid",
+            starts_at=datetime(2026, 10, 2, tzinfo=UTC),
+            ends_at=datetime(2026, 10, 1, tzinfo=UTC),
+            confidence=0.5,
+            rationale="Invalid interval.",
+        )
+    with pytest.raises(ValidationError):
+        DemandHypothesis(
+            entity_id="org:example",
+            statement="Invalid confidence.",
+            confidence=1.1,
+            rationale="Should fail.",
+        )
+
+
+def test_acquisition_recommendation_is_human_approval_by_default() -> None:
+    from tinlance_sdea.domain.models import AcquisitionRecommendation
+
+    recommendation = AcquisitionRecommendation(
+        opportunity_id=Opportunity(
+            entity_id="org:example",
+            capability_need_id=DemandHypothesis(
+                entity_id="org:example",
+                statement="Need",
+                confidence=0.5,
+                rationale="Evidence exists.",
+            ).id,
+            confidence=0.5,
+            rationale="Evidence-backed opportunity.",
+        ).id,
+        mode=AcquisitionMode.PRODUCT,
+        confidence=0.6,
+        rationale="A product may satisfy the capability.",
+    )
+    assert recommendation.requires_human_approval is True
+
+
+def test_entity_identifier_and_normalization_contracts() -> None:
+    from tinlance_sdea.entity import EntityIdentifier, normalize_entity_name
+
+    identifier = EntityIdentifier(scheme="domain", value="example.com")
+    assert identifier.value == "example.com"
+    assert normalize_entity_name("  Example,  Company! ") == "example company"
+
+
+def test_entity_identifier_rejects_empty_parts() -> None:
+    from tinlance_sdea.entity import EntityIdentifier
+
+    with pytest.raises(ValidationError):
+        EntityIdentifier(scheme="", value="example")
+
+
+def test_entity_rejects_blank_canonical_name() -> None:
+    from tinlance_sdea.entity import Entity, EntityType
+
+    with pytest.raises(ValidationError):
+        Entity(id="org:bad", entity_type=EntityType.ORGANIZATION, canonical_name="   ")
+
+
+def test_evidence_fingerprint_changes_when_observed_content_changes() -> None:
+    first = Evidence(
+        source_type="funding",
+        observed_at=datetime(2026, 10, 1, tzinfo=UTC),
+        collected_at=datetime(2026, 10, 2, tzinfo=UTC),
+        title="Funding announcement",
+        excerpt="Series A",
+    )
+    second = first.model_copy(update={"excerpt": "Series B"})
+    assert fingerprint_evidence(first) != fingerprint_evidence(second)
