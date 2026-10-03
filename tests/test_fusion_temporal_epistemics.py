@@ -2,7 +2,6 @@ from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import pytest
-from pydantic import ValidationError
 
 from tinlance_sdea.epistemics import (
     Contradiction,
@@ -26,8 +25,8 @@ from tinlance_sdea.fusion import (
 )
 from tinlance_sdea.signals import SignalType, normalize_signal
 from tinlance_sdea.temporal import (
-    TimeInterval,
     TemporalRelation,
+    TimeInterval,
     acceleration_ratio,
     decay_score,
     derive_window,
