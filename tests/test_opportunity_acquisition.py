@@ -91,3 +91,25 @@ def test_untraceable_opportunity_is_rejected_at_construction() -> None:
             evidence_ids=(),
             rationale="missing evidence",
         )
+
+
+def test_secondary_acquisition_contracts_preserve_governance() -> None:
+    with pytest.raises(ValueError):
+        recommend(
+            uuid4(),
+            AcquisitionMode.FDE,
+            0.8,
+            "",
+        )
+    from tinlance_sdea.acquisition.models import AcquisitionConstraint, AcquisitionRecommendationRecord
+
+    with pytest.raises(ValueError):
+        AcquisitionConstraint(mode=AcquisitionMode.HIRE, allowed=False)
+    with pytest.raises(ValueError):
+        AcquisitionRecommendationRecord(
+            opportunity_id=str(uuid4()),
+            mode=AcquisitionMode.FDE,
+            confidence=0.8,
+            rationale="autonomous",
+            requires_human_approval=False,
+        )
