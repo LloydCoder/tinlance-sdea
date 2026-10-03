@@ -9,7 +9,6 @@ class InvariantViolation(ValueError):
 
 def require_evidence_for_opportunity(opportunity: Opportunity, evidence_count: int) -> None:
     """Require an opportunity to remain traceable to at least one evidence item."""
-
     if not opportunity.evidence_ids and evidence_count == 0:
         raise InvariantViolation(
             "An SDEA opportunity must remain traceable to at least one evidence item."
@@ -18,6 +17,5 @@ def require_evidence_for_opportunity(opportunity: Opportunity, evidence_count: i
 
 def require_rationale(hypothesis: DemandHypothesis) -> None:
     """Require an explicit rationale for every demand hypothesis."""
-
     if not hypothesis.rationale.strip():
         raise InvariantViolation("A demand hypothesis requires an explicit rationale.")
