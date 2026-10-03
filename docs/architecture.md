@@ -271,7 +271,16 @@ S0 and S1 implement the canonical domain and entity/evidence foundations. S2 add
 - adapter capability, registry and health contracts
 - CI quality gates across Python 3.12–3.14
 
-The surrounding fusion, temporal, inference, opportunity and integration packages remain reserved seams until their serial phases are implemented.
+S3 implements the fusion, temporal and epistemic foundations:
+
+- deterministic temporal correlation and connected-component clustering
+- source-diversity and reliability weighting
+- explicit directional contradiction detection
+- serializable signal relationship graph and fusion explanations
+- temporal intervals, recency, persistence, acceleration, decay and monitoring windows
+- independent epistemic assessment, uncertainty, contradiction and calibration primitives
+
+These components are deterministic foundations. They do not assert demand, capability or opportunity truth; those remain S4+ responsibilities.
 
 The signal-adapter boundary is intentionally narrow: adapters translate source payloads into canonical signals; they do not own crawling policy, commercial workflows, inference authority or execution.
 
