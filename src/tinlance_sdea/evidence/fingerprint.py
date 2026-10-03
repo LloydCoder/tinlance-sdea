@@ -8,7 +8,7 @@ from ..domain.models import Evidence
 
 
 def fingerprint_evidence(evidence: Evidence) -> str:
-    """Return a stable SHA-256 fingerprint for reconciliation.
+    """Return a stable SHA-256 fingerprint for the observed evidence semantics.
 
     Collection time is excluded so re-collection of the same observed artifact
     can reconcile to the same evidence identity.
