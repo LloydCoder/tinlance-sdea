@@ -234,7 +234,7 @@ SDEA's canonical data path should preserve the distinction between:
 - recommendation
 - downstream action
 
-This is analogous to established telemetry practice: named events represent distinct occurrences, while structured attributes carry contextual details. OpenTelemetry's semantic-convention guidance also emphasizes stable names, timestamps and documented attributes. urlOpenTelemetry events and semantic conventionshttps://opentelemetry.io/docs/specs/semconv/general/events/
+This is analogous to established telemetry practice: named events represent distinct occurrences, while structured attributes carry contextual details. OpenTelemetry's semantic-convention guidance also emphasizes stable names, timestamps and documented attributes. [OpenTelemetry events and semantic conventions](https://opentelemetry.io/docs/specs/semconv/general/events/)
 
 SDEA should therefore prefer explicit, versioned schemas over opaque model-generated blobs.
 
