@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tinlance-sdea"
+version = "0.1.0"
+description = "Evidence-backed intelligence engine for Signal-Driven Engineering Acquisition."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+authors = [{ name = "Tinlance Limited" }]
+keywords = ["sdea", "demand-intelligence", "capability-intelligence", "opportunity-intelligence"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Typing :: Typed"
+]
+dependencies = ["pydantic>=2.10,<3"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<9",
+  "pytest-cov>=6,<7",
+  "ruff>=0.13,<1",
+  "mypy>=1.17,<2",
+  "pre-commit>=4,<5"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tinlance_sdea"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["tinlance_sdea"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
