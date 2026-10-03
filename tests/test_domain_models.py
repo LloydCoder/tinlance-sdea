@@ -227,7 +227,13 @@ def test_acquisition_recommendation_is_human_approval_by_default() -> None:
     )
     assert recommendation.requires_human_approval is True
     with pytest.raises(ValidationError):
-        recommendation.model_copy(update={"requires_human_approval": False})
+        AcquisitionRecommendation(
+            opportunity_id=recommendation.opportunity_id,
+            mode=AcquisitionMode.PRODUCT,
+            confidence=0.6,
+            rationale="Unsafe autonomous recommendation.",
+            requires_human_approval=False,
+        )
 
 
 def test_entity_identifier_and_normalization_contracts() -> None:
