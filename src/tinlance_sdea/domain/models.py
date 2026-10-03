@@ -7,16 +7,33 @@ from enum import StrEnum
 from typing import Any
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
 
-class EvidenceState(StrEnum):
+class EpistemicState(StrEnum):
+    """What the available evidence supports epistemically."""
+
     OBSERVED = "observed"
     CORROBORATED = "corroborated"
     INFERRED = "inferred"
     HYPOTHESIZED = "hypothesized"
     QUALIFIED = "qualified"
     CONFIRMED = "confirmed"
+
+
+class LifecycleState(StrEnum):
+    """Lifecycle of an intelligence object independent of epistemic certainty."""
+
+    ACTIVE = "active"
+    STALE = "stale"
+    RESOLVED = "resolved"
+    EXPIRED = "expired"
+    SUPERSEDED = "superseded"
+    RETRACTED = "retracted"
+
+
+# Backward-compatible name for the pre-S1 contract.
+EvidenceState = EpistemicState
 
 
 class AcquisitionMode(StrEnum):
@@ -70,13 +87,22 @@ class Evidence(SDEAModel):
     content_hash: str | None = None
     provenance_ref: str | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
+    epistemic_state: EpistemicState = EpistemicState.OBSERVED
+    lifecycle_state: LifecycleState = LifecycleState.ACTIVE
+
+    @model_validator(mode="after")
+    def validate_timestamps(self) -> "Evidence":
+        if self.collected_at < self.observed_at:
+            raise ValueError("collected_at cannot be earlier than observed_at")
+        return self
 
 
 class Signal(SDEAModel):
     id: UUID = Field(default_factory=uuid4)
     entity_id: str
     signal_type: str
-    state: EvidenceState = EvidenceState.OBSERVED
+    state: EpistemicState = EpistemicState.OBSERVED
+    lifecycle_state: LifecycleState = LifecycleState.ACTIVE
     occurred_at: datetime
     observed_at: datetime
     evidence_ids: tuple[UUID, ...] = ()
@@ -87,17 +113,25 @@ class SignalCluster(SDEAModel):
     id: UUID = Field(default_factory=uuid4)
     entity_id: str
     signal_ids: tuple[UUID, ...]
-    state: EvidenceState = EvidenceState.CORROBORATED
+    state: EpistemicState = EpistemicState.CORROBORATED
+    lifecycle_state: LifecycleState = LifecycleState.ACTIVE
     first_observed_at: datetime
     last_observed_at: datetime
     confidence: float = Field(ge=0.0, le=1.0)
+
+    @model_validator(mode="after")
+    def validate_interval(self) -> "SignalCluster":
+        if self.last_observed_at < self.first_observed_at:
+            raise ValueError("last_observed_at cannot be earlier than first_observed_at")
+        return self
 
 
 class DemandHypothesis(SDEAModel):
     id: UUID = Field(default_factory=uuid4)
     entity_id: str
     statement: str
-    state: EvidenceState = EvidenceState.HYPOTHESIZED
+    state: EpistemicState = EpistemicState.HYPOTHESIZED
+    lifecycle_state: LifecycleState = LifecycleState.ACTIVE
     supporting_signal_ids: tuple[UUID, ...] = ()
     confidence: float = Field(ge=0.0, le=1.0)
     rationale: str
@@ -121,12 +155,19 @@ class BuyingWindow(SDEAModel):
     confidence: float = Field(ge=0.0, le=1.0)
     rationale: str
 
+    @model_validator(mode="after")
+    def validate_interval(self) -> "BuyingWindow":
+        if self.starts_at is not None and self.ends_at is not None and self.ends_at < self.starts_at:
+            raise ValueError("ends_at cannot be earlier than starts_at")
+        return self
+
 
 class Opportunity(SDEAModel):
     id: UUID = Field(default_factory=uuid4)
     entity_id: str
     capability_need_id: UUID
-    state: EvidenceState = EvidenceState.QUALIFIED
+    state: EpistemicState = EpistemicState.QUALIFIED
+    lifecycle_state: LifecycleState = LifecycleState.ACTIVE
     confidence: float = Field(ge=0.0, le=1.0)
     buying_window_id: UUID | None = None
     acquisition_modes: tuple[AcquisitionMode, ...] = ()
