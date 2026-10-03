@@ -7,8 +7,8 @@ from tinlance_sdea.evaluation import (
     Adjudication,
     RegressionResult,
     benchmark_cases,
-    evaluate_cases,
     brier,
+    evaluate_cases,
     precision,
     recall,
 )
