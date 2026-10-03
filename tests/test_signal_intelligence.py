@@ -11,6 +11,7 @@ from tinlance_sdea.adapters import (
     AdapterRegistry,
     SignalAdapter,
 )
+from tinlance_sdea.entity import normalize_entity_name
 from tinlance_sdea.signals import (
     SIGNAL_TAXONOMY_VERSION,
     SignalRecord,
@@ -128,3 +129,20 @@ def test_signal_fingerprint_changes_when_source_event_changes() -> None:
 def test_taxonomy_version_is_explicit() -> None:
     assert SIGNAL_TAXONOMY_VERSION == "1.0.0"
     assert taxonomy_version() == SIGNAL_TAXONOMY_VERSION
+
+
+def test_unicode_entity_normalization_is_lossless_for_letters_and_numbers() -> None:
+    assert normalize_entity_name("  München GmbH  ") == "münchen gmbh"
+    assert normalize_entity_name("東京 株式会社") == "東京 株式会社"
+
+
+def test_normalized_signal_rejects_naive_timestamps() -> None:
+    with pytest.raises(ValidationError):
+        SignalRecord(
+            entity_id="org:example",
+            signal_type="hiring",
+            source_event_id="evt-1",
+            occurred_at=datetime(2026, 10, 1),
+            observed_at=datetime(2026, 10, 2),
+            evidence_ids=(uuid4(),),
+        )
