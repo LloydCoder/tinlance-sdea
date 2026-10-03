@@ -1,5 +1,7 @@
 """Shared integration contract."""
 
+from __future__ import annotations
+
 from pydantic import Field, model_validator
 
 from ..contracts.versions import CONTRACT_VERSION, validate_version
