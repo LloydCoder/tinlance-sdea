@@ -1,6 +1,7 @@
 """Capability ontology contracts."""
 
 from pydantic import Field
+
 from ..domain.models import SDEAModel
 
 
