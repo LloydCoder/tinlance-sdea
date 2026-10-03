@@ -1,10 +1,7 @@
 """Deterministic entity-name normalization helpers."""
 
-from __future__ import annotations
-
 import re
 import unicodedata
-
 
 _WHITESPACE = re.compile(r"\s+")
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
