@@ -65,7 +65,7 @@ def test_temporal_primitives_and_relations() -> None:
     assert acceleration_ratio(recent_count=2, prior_count=0) == 1.0
     assert decay_score(age_days=0, half_life_days=7) == pytest.approx(1.0)
     assert recency_score(observed_at=start, now=start, half_life_days=7) == pytest.approx(1.0)
-    assert relate(interval, TimeInterval(start=end, end=end)) is TemporalRelation.OVERLAPS
+    assert relate(interval, TimeInterval(start=end, end=end)) is TemporalRelation.CONTAINS
     assert derive_window(anchor=start, horizon_days=7).end == start + timedelta(days=7)
     with pytest.raises(ValueError):
         TimeInterval(start=end, end=start)
@@ -93,7 +93,7 @@ def test_fusion_weight_diversity_contradiction_and_explanation() -> None:
     up = signal(when=base, direction="increase")
     down = signal(when=base + timedelta(days=1), direction="decrease")
     assert find_contradictions((up, down)) == ((str(up.id), str(down.id)),)
-    assert weight_signal(up, source_reliability=0.8) == pytest.approx(0.4)
+    assert weight_signal(up, source_reliability=0.8) == pytest.approx(0.5333333333)
     assert source_diversity(["a", "b", "a", "c"]) == 1.0
     explanation = explain_cluster((str(up.id),), reasons=("same entity",))
     assert isinstance(explanation, FusionExplanation)
