@@ -11,6 +11,7 @@ from tinlance_sdea.domain.models import (
     Evidence,
     EvidenceState,
     Opportunity,
+    Signal,
 )
 from tinlance_sdea.entity import Entity, EntityAlias, EntityType, resolve_entity
 from tinlance_sdea.evidence import Provenance, SourceReliability, fingerprint_evidence
