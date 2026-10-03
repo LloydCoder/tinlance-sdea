@@ -6,9 +6,7 @@ from uuid import UUID, uuid4
 from .models import OutcomeEvent
 
 
-def record_event(
-    opportunity_id: UUID, event_type: str, occurred_at: datetime
-) -> OutcomeEvent:
+def record_event(opportunity_id: UUID, event_type: str, occurred_at: datetime) -> OutcomeEvent:
     return OutcomeEvent(
         id=uuid4(),
         opportunity_id=opportunity_id,
