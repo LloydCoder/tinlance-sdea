@@ -1,6 +1,7 @@
 """Calibration evaluation facade."""
 
 from collections.abc import Sequence
+
 from ..epistemics.calibration import brier_score
 
 
