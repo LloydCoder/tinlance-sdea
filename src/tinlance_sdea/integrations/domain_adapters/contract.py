@@ -4,5 +4,5 @@ from .._shared import IntegrationContract
 
 
 class DomainAdapterContract(IntegrationContract):
-    consumer = "domain_adapter"
-    purpose = "source-specific signal translation"
+    consumer: str = "domain_adapter"
+    purpose: str = "source-specific signal translation"
