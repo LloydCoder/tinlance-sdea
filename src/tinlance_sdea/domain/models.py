@@ -91,7 +91,7 @@ class Evidence(SDEAModel):
     lifecycle_state: LifecycleState = LifecycleState.ACTIVE
 
     @model_validator(mode="after")
-    def validate_timestamps(self) -> "Evidence":
+    def validate_timestamps(self) -> Evidence:
         if self.collected_at < self.observed_at:
             raise ValueError("collected_at cannot be earlier than observed_at")
         return self
@@ -120,7 +120,7 @@ class SignalCluster(SDEAModel):
     confidence: float = Field(ge=0.0, le=1.0)
 
     @model_validator(mode="after")
-    def validate_interval(self) -> "SignalCluster":
+    def validate_interval(self) -> SignalCluster:
         if self.last_observed_at < self.first_observed_at:
             raise ValueError("last_observed_at cannot be earlier than first_observed_at")
         return self
@@ -156,8 +156,12 @@ class BuyingWindow(SDEAModel):
     rationale: str
 
     @model_validator(mode="after")
-    def validate_interval(self) -> "BuyingWindow":
-        if self.starts_at is not None and self.ends_at is not None and self.ends_at < self.starts_at:
+    def validate_interval(self) -> BuyingWindow:
+        if (
+            self.starts_at is not None
+            and self.ends_at is not None
+            and self.ends_at < self.starts_at
+        ):
             raise ValueError("ends_at cannot be earlier than starts_at")
         return self
 
