@@ -6,7 +6,7 @@ from .health import AdapterHealth, AdapterHealthReport
 from .registry import AdapterRegistry
 
 __all__ = [
-        "AdapterCapability",
+    "AdapterCapability",
     "AdapterHealth",
     "AdapterHealthReport",
     "AdapterRegistry",
