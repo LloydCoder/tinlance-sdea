@@ -248,7 +248,7 @@ The recommendation layer is advisory. It does not decide which mode a customer m
 9. **No hidden authority.** SDEA cannot grant permissions, approve actions or execute customer changes.
 10. **Every important conclusion should be explainable.** A consumer should be able to understand what changed, what supports it and why the inference exists.
 
-These principles align with established engineering practice around explicit semantic conventions and event modeling, and with risk-management guidance emphasizing validity, reliability, transparency, explainability and human oversight. urlOpenTelemetry semantic conventionshttps://opentelemetry.io/docs/concepts/semantic-conventions/ urlNIST AI Risk Management Frameworkhttps://www.nist.gov/itl/ai-risk-management-framework
+These principles align with established engineering practice around explicit semantic conventions and event modeling, and with risk-management guidance emphasizing validity, reliability, transparency, explainability and human oversight. [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/concepts/semantic-conventions/) [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
 
 ## Canonical domain contracts
 
