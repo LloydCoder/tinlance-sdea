@@ -101,6 +101,8 @@ LLMs or other models remain replaceable inference components; they do not become
 
 ## S5 — Opportunity Intelligence
 
+**Status: in progress.**
+
 Build:
 - opportunity graph
 - qualification
