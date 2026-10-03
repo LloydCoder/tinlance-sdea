@@ -12,7 +12,10 @@ class TimeInterval(SDEAModel):
     end: datetime
 
     @model_validator(mode="after")
-    def validate_order(self) -> "TimeInterval":
+    def validate_order(self) -> TimeInterval:
+        for name, value in (("start", self.start), ("end", self.end)):
+            if value.tzinfo is None or value.utcoffset() is None:
+                raise ValueError(f"{name} must be timezone-aware")
         if self.end < self.start:
             raise ValueError("interval end cannot precede start")
         return self
