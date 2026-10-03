@@ -14,5 +14,5 @@ def brier_score(predictions: Sequence[float], outcomes: Sequence[bool]) -> float
         raise ValueError("predictions must be between 0 and 1")
     return sum(
         (prediction - float(outcome)) ** 2
-        for prediction, outcome in zip(predictions, outcomes)
+        for prediction, outcome in zip(predictions, outcomes, strict=True)
     ) / len(predictions)
