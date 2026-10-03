@@ -10,9 +10,7 @@ from .models import SignalRecord
 def fingerprint_signal(signal: SignalRecord) -> str:
     """Return a stable identity fingerprint independent of collection UUID."""
 
-    attributes = "\x1f".join(
-        f"{key}={value}" for key, value in sorted(signal.attributes.items())
-    )
+    attributes = "\x1f".join(f"{key}={value}" for key, value in sorted(signal.attributes.items()))
     parts = (
         signal.entity_id,
         signal.signal_type,
