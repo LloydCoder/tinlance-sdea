@@ -47,7 +47,12 @@ def test_opportunity_graph_handoff_and_explanation() -> None:
     graph = graph_from_edges(("a", "b"), (("a", "b"),))
     assert isinstance(graph, OpportunityGraph)
     handoff = make_handoff(
-        uuid4(), "org:example", "platform", 0.8, "evidence-backed capability need"
+        uuid4(),
+        "org:example",
+        "platform",
+        0.8,
+        (uuid4(),),
+        "evidence-backed capability need",
     )
     assert handoff.capability_id == "platform"
     explanation = OpportunityExplanation(
