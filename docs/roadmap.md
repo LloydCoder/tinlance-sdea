@@ -150,6 +150,8 @@ External systems may consume or provide intelligence but cannot redefine SDEA se
 
 ## S8 — Enterprise Hardening
 
+**Status: in progress.**
+
 Build:
 - provenance integrity and reconstruction
 - data classification
