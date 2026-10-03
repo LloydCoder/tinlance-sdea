@@ -177,20 +177,33 @@ product
 
 The recommendation does not authorize outreach, contracting, execution or deployment.
 
-## 9. Evidence-state semantics
+## 9. Epistemic and lifecycle semantics
 
-`EvidenceState` currently contains:
+The original `EvidenceState` name is retained as a compatibility alias for `EpistemicState`. The canonical model now separates two independent dimensions:
+
+### EpistemicState
 
 | State | Meaning |
 |---|---|
 | `observed` | Directly observed or captured |
 | `corroborated` | Supported by multiple relevant observations |
-| `inferred` | Derived from evidence through reasoning |
+| `inferred` | Derived through explicit reasoning |
 | `hypothesized` | Explicit but unconfirmed interpretation |
 | `qualified` | Sufficiently supported for the relevant downstream qualification step |
 | `confirmed` | Confirmed through an appropriate authoritative source or workflow |
 
-These states describe epistemic status, not business priority.
+### LifecycleState
+
+| State | Meaning |
+|---|---|
+| `active` | Current and usable |
+| `stale` | Still retained but materially aged |
+| `resolved` | The relevant condition has been resolved |
+| `expired` | The temporal opportunity has passed |
+| `superseded` | Replaced by a later intelligence object |
+| `retracted` | Withdrawn because its basis is no longer trusted |
+
+These states describe epistemic status and lifecycle, not business priority. Confidence remains a separate numeric dimension.
 
 ## 10. Source taxonomy
 
@@ -216,27 +229,20 @@ The taxonomy is intentionally extensible. New source types should be introduced 
 
 ## 11. Invariants
 
-The current domain invariant layer requires:
+The completed canonical model layer enforces:
 
-1. An opportunity remains traceable to at least one evidence item.
-2. A demand hypothesis has a non-empty rationale.
+1. Every evidence item has timezone-aware observation and collection timestamps, with collection not preceding observation.
+2. Every canonical signal has evidence lineage, non-empty identity and chronologically valid timestamps.
+3. Signal clusters contain at least one member and have valid temporal intervals.
+4. Demand hypotheses contain supporting signal identifiers and a non-empty rationale.
+5. Capability needs contain normalized capability text and an explicit `why_now` rationale.
+6. Opportunities contain evidence identifiers and a non-empty rationale.
+7. Acquisition recommendations require human approval and an explicit rationale.
+8. Confidence, urgency and reliability values remain in `[0, 1]`.
+9. Canonical models are immutable and reject unexpected fields.
+10. Contract versions and integration event versions are validated.
 
-The models also enforce:
-
-- immutable canonical objects
-- forbidden unexpected fields
-- confidence values between 0 and 1
-- typed identifiers and timestamps
-
-As the system matures, invariants should expand to cover:
-
-- provenance integrity
-- source/evidence deduplication
-- temporal consistency
-- contradiction representation
-- capability ontology validity
-- recommendation traceability
-- contract-version compatibility
+Cross-cutting modules additionally enforce ambiguity-safe entity resolution, capability parent integrity, lifecycle transition rules, stable observability event names and deterministic regression evaluation.
 
 ## 12. Canonical signal-intelligence layer
 
