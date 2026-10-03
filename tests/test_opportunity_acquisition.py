@@ -77,12 +77,12 @@ def test_acquisition_constraints_and_recommendation() -> None:
     assert explanation.mode == "fde"
 
 
-def test_untraceable_opportunity_is_not_qualified() -> None:
-    item = Opportunity(
-        entity_id="org:example",
-        capability_need_id=uuid4(),
-        confidence=0.8,
-        evidence_ids=(),
-        rationale="missing evidence",
-    )
-    assert not qualify(item)
+def test_untraceable_opportunity_is_rejected_at_construction() -> None:
+    with pytest.raises(ValueError, match="evidence"):
+        Opportunity(
+            entity_id="org:example",
+            capability_need_id=uuid4(),
+            confidence=0.8,
+            evidence_ids=(),
+            rationale="missing evidence",
+        )
