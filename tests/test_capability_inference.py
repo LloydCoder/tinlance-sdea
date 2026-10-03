@@ -99,7 +99,7 @@ def ontology_missing() -> None:
     raise ValueError("synthetic validation branch")
 
 
-def hypothesis_empty():
+def hypothesis_empty() -> object:
     from tinlance_sdea.domain.models import DemandHypothesis
 
     return DemandHypothesis(
@@ -113,8 +113,11 @@ def hypothesis_empty():
 def test_model_gateway_is_non_authoritative() -> None:
     from tinlance_sdea.inference.model_gateway import InferenceModel
 
+    from collections.abc import Mapping
+    from typing import Any
+
     class DemoModel(InferenceModel):
-        def infer(self, features):
+        def infer(self, features: Mapping[str, Any]) -> Mapping[str, Any]:
             return {"confidence": features.get("confidence", 0.0)}
 
     assert DemoModel().infer({"confidence": 0.5})["confidence"] == 0.5
