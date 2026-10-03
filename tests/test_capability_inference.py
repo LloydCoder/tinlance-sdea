@@ -1,7 +1,11 @@
-from collections.abc import Mapping\nfrom collections.abc import Mapping
+from collections.abc import Mapping
 from datetime import UTC, datetime
-from typing import Any\nfrom uuid import uuid4
+from typing import Any
+from uuid import uuid4
 
+import pytest
+
+from tinlance_sdea.inference.model_gateway import InferenceModel
 import pytest
 
 from tinlance_sdea.capability import (
