@@ -1,7 +1,9 @@
 """Integration event contracts."""
 
 from datetime import datetime
+
 from pydantic import Field
+
 from ..domain.models import SDEAModel
 
 
