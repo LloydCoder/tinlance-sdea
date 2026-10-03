@@ -112,7 +112,7 @@ def test_adapter_registry_is_explicit_and_capability_is_bounded() -> None:
     report = AdapterHealthReport(
         adapter_name="example",
         status=AdapterHealth.HEALTHY,
-        checked_at="2026-10-02T00:00:00Z",
+        checked_at=datetime(2026, 10, 2, tzinfo=UTC),
         message="ok",
         latency_ms=12.5,
     )
