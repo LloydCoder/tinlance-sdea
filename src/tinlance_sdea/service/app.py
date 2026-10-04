@@ -94,5 +94,6 @@ def root() -> dict[str, str]:
         "health": "/healthz",
         "readiness": "/readyz",
         "version": settings.version,
+        "environment": settings.environment,
         "timestamp": datetime.now(UTC).isoformat(),
     }
