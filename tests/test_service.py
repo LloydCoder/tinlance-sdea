@@ -121,10 +121,7 @@ def test_redis_check_failure(monkeypatch) -> None:
         def from_url(_url, socket_connect_timeout, socket_timeout):
             raise RuntimeError("redis unavailable")
 
-    class RedisModule:
-        Redis = Redis
-
     monkeypatch.setattr(service_module, "settings", Settings(redis_url="redis://test"))
-    monkeypatch.setitem(__import__("sys").modules, "redis", RedisModule())
+    monkeypatch.setitem(__import__("sys").modules, "redis", SimpleNamespace(Redis=Redis))
 
     assert service_module._check_redis() == (False, "unavailable")
