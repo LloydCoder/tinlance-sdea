@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 from fastapi.testclient import TestClient
 
 from tinlance_sdea.service import app as service_module
@@ -107,11 +109,8 @@ def test_redis_check_success(monkeypatch) -> None:
             assert socket_timeout == 3
             return Client()
 
-    class RedisModule:
-        Redis = Redis
-
     monkeypatch.setattr(service_module, "settings", Settings(redis_url="redis://test"))
-    monkeypatch.setitem(__import__("sys").modules, "redis", RedisModule())
+    monkeypatch.setitem(__import__("sys").modules, "redis", SimpleNamespace(Redis=Redis))
 
     assert service_module._check_redis() == (True, "ok")
 
