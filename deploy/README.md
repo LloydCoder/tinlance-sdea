@@ -170,6 +170,10 @@ Required operating policy:
 
 A Docker volume on the same VPS is not disaster recovery.
 
+## Verification
+
+Before production promotion, run the repository CI and the container build workflow on the exact release commit. The VPS healthcheck must return success after deployment.
+
 ## Scaling path
 
 ### Stage 1
