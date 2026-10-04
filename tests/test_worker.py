@@ -52,3 +52,32 @@ def test_worker_stops_cleanly(monkeypatch) -> None:
     worker._STOP = False
     worker.main()
     assert worker._STOP is True
+
+
+def test_worker_rejects_malformed_payload(monkeypatch) -> None:
+    worker = _worker_module(monkeypatch)
+
+    class Client:
+        def __init__(self):
+            self.calls = 0
+
+        def brpop(self, _queue, timeout):
+            assert timeout == 5
+            self.calls += 1
+            if self.calls == 1:
+                return ("sdea:jobs", "{not-json")
+            worker._STOP = True
+            return None
+
+        def close(self):
+            return None
+
+    class RedisModule:
+        @staticmethod
+        def from_url(_url, decode_responses):
+            return Client()
+
+    monkeypatch.setattr(worker, "redis", RedisModule())
+    worker._STOP = False
+    worker.main()
+    assert worker._STOP is True
