@@ -3,17 +3,17 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True, slots=True)
 class Settings:
-    app_name: str = "tinlance-sdea"
-    environment: str = "production"
-    version: str = "0.1.0"
-    database_url: str = ""
-    redis_url: str = ""
-    log_level: str = "INFO"
+    app_name: str = field(default="tinlance-sdea")
+    environment: str = field(default="production")
+    version: str = field(default="0.1.0")
+    database_url: str = field(default="")
+    redis_url: str = field(default="")
+    log_level: str = field(default="INFO")
 
     @classmethod
     def from_env(cls) -> Settings:
