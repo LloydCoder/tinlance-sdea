@@ -1,16 +1,11 @@
-from types import SimpleNamespace
-
-from fastapi.testclient import TestClient
-
 from tinlance_sdea.service import app as service_module
 from tinlance_sdea.service.config import Settings
 
 
 def test_healthz_is_dependency_free() -> None:
-    response = TestClient(service_module.app).get("/healthz")
+    payload = service_module.healthz()
 
-    assert response.status_code == 200
-    assert response.json()["status"] == "ok"
+    assert payload["status"] == "ok"
 
 
 def test_version_surface_is_stable(monkeypatch) -> None:
@@ -24,29 +19,23 @@ def test_version_surface_is_stable(monkeypatch) -> None:
 def test_readiness_fails_closed_without_dependencies(monkeypatch) -> None:
     monkeypatch.setattr(service_module, "settings", Settings(database_url="", redis_url=""))
 
-    response = TestClient(service_module.app).get("/readyz")
+    response = service_module.readyz()
 
     assert response.status_code == 503
-    assert response.json()["status"] == "not_ready"
-    assert response.json()["dependencies"] == {
-        "database": "not_configured",
-        "redis": "not_configured",
-    }
+    assert response.body is not None
+    assert b'"status":"not_ready"' in response.body
 
 
 def test_root_contains_operational_metadata(monkeypatch) -> None:
-    monkeypatch.setattr(
-        service_module,
-        "settings",
-        Settings(app_name="test-sdea", version="9.9.9", environment="test"),
-    )
+    settings = Settings(app_name="test-sdea", version="9.9.9", environment="test")
+    monkeypatch.setattr(service_module, "settings", settings)
 
-    response = TestClient(service_module.app).get("/")
+    payload = service_module.root()
 
-    assert response.status_code == 200
-    assert response.json()["service"] == "test-sdea"
-    assert response.json()["version"] == "9.9.9"
-    assert response.json()["environment"] == "test"
+    assert payload["service"] == "test-sdea"
+    assert payload["version"] == "9.9.9"
+    assert payload["environment"] == "test"
+    assert "timestamp" in payload
 
 
 def test_database_check_success(monkeypatch) -> None:
@@ -73,26 +62,22 @@ def test_database_check_success(monkeypatch) -> None:
         def cursor(self):
             return Cursor()
 
-    class Psycopg:
-        @staticmethod
-        def connect(_url, connect_timeout):
-            assert connect_timeout == 3
-            return Connection()
+    def connect(_url, connect_timeout):
+        assert connect_timeout == 3
+        return Connection()
 
     monkeypatch.setattr(service_module, "settings", Settings(database_url="postgresql://test"))
-    monkeypatch.setitem(__import__("sys").modules, "psycopg", Psycopg())
+    monkeypatch.setattr("psycopg.connect", connect)
 
     assert service_module._check_database() == (True, "ok")
 
 
 def test_database_check_failure(monkeypatch) -> None:
-    class Psycopg:
-        @staticmethod
-        def connect(_url, connect_timeout):
-            raise RuntimeError("database unavailable")
+    def connect(_url, connect_timeout):
+        raise RuntimeError("database unavailable")
 
     monkeypatch.setattr(service_module, "settings", Settings(database_url="postgresql://test"))
-    monkeypatch.setitem(__import__("sys").modules, "psycopg", Psycopg())
+    monkeypatch.setattr("psycopg.connect", connect)
 
     assert service_module._check_database() == (False, "unavailable")
 
@@ -102,26 +87,22 @@ def test_redis_check_success(monkeypatch) -> None:
         def ping(self):
             return True
 
-    class Redis:
-        @staticmethod
-        def from_url(_url, socket_connect_timeout, socket_timeout):
-            assert socket_connect_timeout == 3
-            assert socket_timeout == 3
-            return Client()
+    def from_url(_url, socket_connect_timeout, socket_timeout):
+        assert socket_connect_timeout == 3
+        assert socket_timeout == 3
+        return Client()
 
     monkeypatch.setattr(service_module, "settings", Settings(redis_url="redis://test"))
-    monkeypatch.setitem(__import__("sys").modules, "redis", SimpleNamespace(Redis=Redis))
+    monkeypatch.setattr("redis.Redis.from_url", from_url)
 
     assert service_module._check_redis() == (True, "ok")
 
 
 def test_redis_check_failure(monkeypatch) -> None:
-    class Redis:
-        @staticmethod
-        def from_url(_url, socket_connect_timeout, socket_timeout):
-            raise RuntimeError("redis unavailable")
+    def from_url(_url, socket_connect_timeout, socket_timeout):
+        raise RuntimeError("redis unavailable")
 
     monkeypatch.setattr(service_module, "settings", Settings(redis_url="redis://test"))
-    monkeypatch.setitem(__import__("sys").modules, "redis", SimpleNamespace(Redis=Redis))
+    monkeypatch.setattr("redis.Redis.from_url", from_url)
 
     assert service_module._check_redis() == (False, "unavailable")

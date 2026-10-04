@@ -1,11 +1,8 @@
 import importlib
-import sys
-from types import SimpleNamespace
 
 
 def _worker_module(monkeypatch):
     monkeypatch.setenv("REDIS_URL", "redis://test")
-    sys.modules.pop("tinlance_sdea.service.worker", None)
     return importlib.import_module("tinlance_sdea.service.worker")
 
 
@@ -44,13 +41,9 @@ def test_worker_stops_cleanly(monkeypatch) -> None:
             return None
 
     monkeypatch.setattr(
-        worker,
-        "redis",
-        SimpleNamespace(
-            Redis=SimpleNamespace(
-                from_url=lambda _url, decode_responses: Client(),
-            )
-        ),
+        worker.redis.Redis,
+        "from_url",
+        staticmethod(lambda _url, decode_responses: Client()),
     )
     worker._STOP = False
     worker.main()
@@ -76,13 +69,9 @@ def test_worker_rejects_malformed_payload(monkeypatch) -> None:
             return None
 
     monkeypatch.setattr(
-        worker,
-        "redis",
-        SimpleNamespace(
-            Redis=SimpleNamespace(
-                from_url=lambda _url, decode_responses: Client(),
-            )
-        ),
+        worker.redis.Redis,
+        "from_url",
+        staticmethod(lambda _url, decode_responses: Client()),
     )
     worker._STOP = False
     worker.main()
