@@ -1,5 +1,3 @@
-from types import SimpleNamespace
-
 from tinlance_sdea.service import app as service_module
 from tinlance_sdea.service.config import Settings
 
