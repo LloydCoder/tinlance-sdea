@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import signal
-from typing import Any
+from typing import Any, cast
 
 import redis
 
@@ -33,7 +33,7 @@ def _dispatch(payload: dict[str, Any]) -> None:
 def main() -> None:
     signal.signal(signal.SIGTERM, _stop)
     signal.signal(signal.SIGINT, _stop)
-    client: Any = redis.Redis.from_url(REDIS_URL, decode_responses=True)
+    client = cast(Any, redis.Redis.from_url(REDIS_URL, decode_responses=True))
     logger.info("SDEA worker started; queue=%s", QUEUE)
 
     while not _STOP:
