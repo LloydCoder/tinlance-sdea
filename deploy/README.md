@@ -217,3 +217,7 @@ This means this deployment branch establishes the production runtime substrate w
 Agent Platform remains authoritative for identity, authorization, approvals, tool access, sandboxing, budgets and governed execution.
 
 SDEA HTTP endpoints, queue messages, PostgreSQL and Valkey are not authorization boundaries.
+
+## CI verification
+
+The VPS deployment stack is validated by the repository CI and container workflows before promotion to `main`.
