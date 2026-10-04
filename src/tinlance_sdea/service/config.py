@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass, field
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class Settings:
     app_name: str = field(default="tinlance-sdea")
     environment: str = field(default="production")
