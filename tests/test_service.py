@@ -45,3 +45,87 @@ def test_root_contains_operational_metadata(monkeypatch) -> None:
     assert response.json()["service"] == "test-sdea"
     assert response.json()["version"] == "9.9.9"
     assert response.json()["environment"] == "test"
+
+
+def test_database_check_success(monkeypatch) -> None:
+    class Cursor:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def execute(self, _query):
+            return None
+
+        def fetchone(self):
+            return (1,)
+
+    class Connection:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def cursor(self):
+            return Cursor()
+
+    class Psycopg:
+        @staticmethod
+        def connect(_url, connect_timeout):
+            assert connect_timeout == 3
+            return Connection()
+
+    monkeypatch.setattr(service_module, "settings", Settings(database_url="postgresql://test"))
+    monkeypatch.setitem(__import__("sys").modules, "psycopg", Psycopg())
+
+    assert service_module._check_database() == (True, "ok")
+
+
+def test_database_check_failure(monkeypatch) -> None:
+    class Psycopg:
+        @staticmethod
+        def connect(_url, connect_timeout):
+            raise RuntimeError("database unavailable")
+
+    monkeypatch.setattr(service_module, "settings", Settings(database_url="postgresql://test"))
+    monkeypatch.setitem(__import__("sys").modules, "psycopg", Psycopg())
+
+    assert service_module._check_database() == (False, "unavailable")
+
+
+def test_redis_check_success(monkeypatch) -> None:
+    class Client:
+        def ping(self):
+            return True
+
+    class Redis:
+        @staticmethod
+        def from_url(_url, socket_connect_timeout, socket_timeout):
+            assert socket_connect_timeout == 3
+            assert socket_timeout == 3
+            return Client()
+
+    class RedisModule:
+        Redis = Redis
+
+    monkeypatch.setattr(service_module, "settings", Settings(redis_url="redis://test"))
+    monkeypatch.setitem(__import__("sys").modules, "redis", RedisModule())
+
+    assert service_module._check_redis() == (True, "ok")
+
+
+def test_redis_check_failure(monkeypatch) -> None:
+    class Redis:
+        @staticmethod
+        def from_url(_url, socket_connect_timeout, socket_timeout):
+            raise RuntimeError("redis unavailable")
+
+    class RedisModule:
+        Redis = Redis
+
+    monkeypatch.setattr(service_module, "settings", Settings(redis_url="redis://test"))
+    monkeypatch.setitem(__import__("sys").modules, "redis", RedisModule())
+
+    assert service_module._check_redis() == (False, "unavailable")
