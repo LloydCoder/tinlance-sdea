@@ -1,7 +1,6 @@
-from types import SimpleNamespace
-
 import importlib
 import sys
+from types import SimpleNamespace
 
 
 def _worker_module(monkeypatch):
