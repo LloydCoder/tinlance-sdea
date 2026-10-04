@@ -6,8 +6,10 @@ import logging
 from datetime import UTC, datetime
 from typing import Any
 
+import psycopg
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from redis import Redis
 
 from tinlance_sdea.service.config import Settings
 
@@ -26,8 +28,6 @@ def _check_database() -> tuple[bool, str]:
     if not settings.database_url:
         return False, "not_configured"
     try:
-        import psycopg
-
         with (
             psycopg.connect(settings.database_url, connect_timeout=3) as connection,
             connection.cursor() as cursor,
@@ -44,9 +44,7 @@ def _check_redis() -> tuple[bool, str]:
     if not settings.redis_url:
         return False, "not_configured"
     try:
-        import redis
-
-        client = redis.Redis.from_url(
+        client = Redis.from_url(
             settings.redis_url,
             socket_connect_timeout=3,
             socket_timeout=3,
