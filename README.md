@@ -368,6 +368,38 @@ pytest --cov=tinlance_sdea --cov-report=term-missing
 
 CI currently tests Python 3.12, 3.13 and 3.14 and applies linting, formatting, strict typing and coverage gates.
 
+## Production deployment
+
+SDEA has a first-stage VPS deployment profile for a 4 vCPU / 8 GB RAM Linux host:
+
+~~~text
+Internet
+   |
+   v
+Caddy :80/:443
+   |
+   v
+SDEA API :8000
+   |        \
+   v         v
+PostgreSQL  Valkey
+   ^
+   |
+SDEA Worker
+~~~
+
+The production runtime is containerized and managed with Docker Compose. The application image is published to GitHub Container Registry by GitHub Actions. PostgreSQL and Valkey are private to the Compose network; only Caddy exposes host ports.
+
+The service exposes dependency-aware operational endpoints:
+
+- /healthz — dependency-free liveness
+- /readyz — PostgreSQL + Valkey readiness
+- /version — deployed version metadata
+
+The VPS runbook is in [docs/deployment](deploy/README.md).
+
+The deployment deliberately does **not** claim that source ingestion, persistence repositories, or inference workers are production-complete. The runtime shell is implemented first; domain handlers are connected only when their contracts, persistence, retries, idempotency and evaluation are implemented and tested.
+
 ## Security and trust
 
 SDEA is intended to process potentially sensitive business intelligence. Enterprise hardening therefore needs to address:
