@@ -28,10 +28,12 @@ def _check_database() -> tuple[bool, str]:
     try:
         import psycopg
 
-        with psycopg.connect(settings.database_url, connect_timeout=3) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT 1")
-                cursor.fetchone()
+        with (
+            psycopg.connect(settings.database_url, connect_timeout=3) as connection,
+            connection.cursor() as cursor,
+        ):
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
         return True, "ok"
     except Exception:
         logger.exception("database readiness check failed")
@@ -44,7 +46,11 @@ def _check_redis() -> tuple[bool, str]:
     try:
         import redis
 
-        client = redis.Redis.from_url(settings.redis_url, socket_connect_timeout=3, socket_timeout=3)
+        client = redis.Redis.from_url(
+            settings.redis_url,
+            socket_connect_timeout=3,
+            socket_timeout=3,
+        )
         client.ping()
         return True, "ok"
     except Exception:
@@ -73,7 +79,11 @@ def readyz() -> JSONResponse:
 
 @app.get("/version", include_in_schema=False)
 def version() -> dict[str, str]:
-    return {"service": settings.app_name, "version": settings.version, "environment": settings.environment}
+    return {
+        "service": settings.app_name,
+        "version": settings.version,
+        "environment": settings.environment,
+    }
 
 
 @app.get("/")
