@@ -1,0 +1,14 @@
+{$SDEA_DOMAIN} {
+    encode zstd gzip
+
+    reverse_proxy api:8000 {
+        health_uri /healthz
+        health_interval 10s
+        health_timeout 3s
+    }
+
+    log {
+        output stdout
+        format json
+    }
+}
