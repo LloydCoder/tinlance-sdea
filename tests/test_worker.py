@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import importlib
 import sys
 
@@ -42,13 +44,15 @@ def test_worker_stops_cleanly(monkeypatch) -> None:
         def close(self):
             return None
 
-    class RedisModule:
-        @staticmethod
-        def from_url(_url, decode_responses):
-            assert decode_responses is True
-            return Client()
-
-    monkeypatch.setattr(worker, "redis", RedisModule())
+    monkeypatch.setattr(
+        worker,
+        "redis",
+        SimpleNamespace(
+            Redis=SimpleNamespace(
+                from_url=lambda _url, decode_responses: Client(),
+            )
+        ),
+    )
     worker._STOP = False
     worker.main()
     assert worker._STOP is True
@@ -72,12 +76,15 @@ def test_worker_rejects_malformed_payload(monkeypatch) -> None:
         def close(self):
             return None
 
-    class RedisModule:
-        @staticmethod
-        def from_url(_url, decode_responses):
-            return Client()
-
-    monkeypatch.setattr(worker, "redis", RedisModule())
+    monkeypatch.setattr(
+        worker,
+        "redis",
+        SimpleNamespace(
+            Redis=SimpleNamespace(
+                from_url=lambda _url, decode_responses: Client(),
+            )
+        ),
+    )
     worker._STOP = False
     worker.main()
     assert worker._STOP is True
