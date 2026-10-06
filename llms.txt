@@ -1,0 +1,61 @@
+# Tinlance SDEA
+
+> Evidence-backed Signal-Driven Engineering Acquisition intelligence layer.
+
+## Canonical description
+
+SDEA converts observable organizational change into evidence-backed capability-demand intelligence and qualified acquisition opportunities. It sits between observation and commercial execution.
+
+## Semantic boundaries
+
+- signal != evidence
+- evidence != demand
+- demand != capability
+- capability != opportunity
+- opportunity != customer
+- recommendation != action
+
+SDEA does not own CRM, outreach, generic scraping, account enrichment, engineering execution, authorization, agent runtime or autonomous commercial action.
+
+## Canonical pipeline
+
+External world -> entity/event -> signal -> evidence/provenance -> normalization -> fusion -> temporal reasoning -> demand hypothesis -> capability need -> opportunity -> buying window -> acquisition recommendation -> human-approved action.
+
+## Repository map
+
+- `src/tinlance_sdea/domain/`: canonical domain contracts.
+- `src/tinlance_sdea/entity/`: entity identity and ambiguity-safe resolution.
+- `src/tinlance_sdea/evidence/`: evidence provenance and fingerprints.
+- `src/tinlance_sdea/signals/`: signal taxonomy, normalization and deduplication.
+- `src/tinlance_sdea/fusion/`: correlation and clustering.
+- `src/tinlance_sdea/temporal/`: temporal reasoning and buying windows.
+- `src/tinlance_sdea/epistemics/`: confidence, uncertainty and calibration.
+- `src/tinlance_sdea/capability/`: capability ontology and mappings.
+- `src/tinlance_sdea/inference/`: demand/capability inference abstractions.
+- `src/tinlance_sdea/opportunity/`: opportunity intelligence and lifecycle.
+- `src/tinlance_sdea/acquisition/`: advisory acquisition recommendations.
+- `src/tinlance_sdea/outcomes/`: outcome and attribution primitives.
+- `src/tinlance_sdea/evaluation/`: metrics, benchmarks and regression evaluation.
+- `src/tinlance_sdea/contracts/`: versioned serialization/event contracts.
+- `src/tinlance_sdea/governance/`: classification, retention and redaction primitives.
+- `src/tinlance_sdea/observability/`: semantic event and trace contracts.
+- `src/tinlance_sdea/policy/`: advisory recommendation-quality controls.
+- `src/tinlance_sdea/integrations/`: downstream/upstream integration contracts.
+- `docs/`: architecture, domain model, roadmap and ADRs.
+- `deploy/`: first-stage Docker Compose deployment profile.
+
+## Start here
+
+- `README.md`
+- `docs/architecture.md`
+- `docs/domain-model.md`
+- `docs/roadmap.md`
+- `docs/adr/README.md`
+
+## Important implementation facts
+
+- Python >= 3.12.
+- Pydantic v2 models are immutable and reject unexpected fields.
+- CI covers Python 3.12, 3.13 and 3.14.
+- Coverage gate is 90%.
+- The repository is proprietary software owned by Tinlance Limited.
