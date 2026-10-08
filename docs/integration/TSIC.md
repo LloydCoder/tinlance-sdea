@@ -24,6 +24,6 @@ A recommendation is not an action. SDEA never grants execution authority.
 python scripts/tsic_conformance.py
 ```
 
-The gate consumes the immutable TSIC revision declared by the script and verifies the SDEA adapter, contract registry, authority mapping and advisory invariants.
+The gate consumes the immutable TSIC revision declared by the script and verifies the SDEA adapter, contract registry, authority mapping and advisory invariants. The reviewed sequence remains World Intelligence → TADS → SDEA; SDEA adds engineering relevance and timing, but does not replace TADS account/target decisioning.
 
 Passing the gate proves reviewed contract compatibility; it does not claim external deployment.
