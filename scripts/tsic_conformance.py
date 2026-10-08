@@ -8,7 +8,13 @@ from urllib.request import Request, urlopen
 
 TSIC_REVISION = "94e2abcc8c34bb91792791f101b72172dd7a2d16"
 RAW_ROOT = f"https://raw.githubusercontent.com/LloydCoder/tinlance-system-integration/{TSIC_REVISION}"
-REQUIRED = {"identity-context", "event-envelope", "delivery-semantics", "trace-context", "economic-attribution"}
+REQUIRED = {
+    "identity-context",
+    "event-envelope",
+    "delivery-semantics",
+    "trace-context",
+    "economic-attribution",
+}
 
 
 def fetch_json(path: str) -> dict:
